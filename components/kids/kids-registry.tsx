@@ -2,7 +2,6 @@
 
 import { useCallback, useMemo, useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
 import { UserPlus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { KIDS, type Kid } from "@/lib/mock-data"
@@ -12,6 +11,7 @@ import { KidGridCard } from "./kid-grid-card"
 import { KidListRow } from "./kid-list-row"
 import { KidsEmptyState } from "./kids-empty-state"
 import { KidsSkeleton } from "./kids-skeleton"
+import { CheckInModal, type CheckAction } from "./check-in-modal"
 
 const TODAY_ISO = "2026-09-10"
 
@@ -56,6 +56,7 @@ export function KidsRegistry() {
   const [sortBy, setSortBy] = useState<SortBy>("recent")
   const [viewMode, setViewMode] = useState<ViewMode>("grid")
   const [loading, setLoading] = useState(true)
+  const [modalKid, setModalKid] = useState<Kid | null>(null)
 
   // Simulate initial load with skeleton
   useMemo(() => {
@@ -103,6 +104,21 @@ export function KidsRegistry() {
     })
   }, [])
 
+  const handleCheckAction = useCallback((kid: Kid) => {
+    setModalKid(kid)
+  }, [])
+
+  const handleModalClose = useCallback(() => {
+    setModalKid(null)
+  }, [])
+
+  const handleModalConfirm = useCallback(
+    (_kid: Kid, _action: CheckAction, _guardianName: string, _time: string) => {
+      // In a real app this would update the database; here we just close after the success animation
+    },
+    [],
+  )
+
   return (
     <main className="min-h-0 flex-1 overflow-y-auto">
       <div className="mx-auto flex max-w-[1500px] flex-col gap-5 px-4 py-6 sm:px-6">
@@ -149,7 +165,7 @@ export function KidsRegistry() {
         ) : viewMode === "grid" ? (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {filtered.map((kid) => (
-              <KidGridCard key={kid.id} kid={kid} />
+              <KidGridCard key={kid.id} kid={kid} onCheckAction={handleCheckAction} />
             ))}
           </div>
         ) : (
@@ -164,7 +180,7 @@ export function KidsRegistry() {
               <span className="text-right">Actions</span>
             </div>
             {filtered.map((kid) => (
-              <KidListRow key={kid.id} kid={kid} />
+              <KidListRow key={kid.id} kid={kid} onCheckAction={handleCheckAction} />
             ))}
           </div>
         )}
@@ -180,6 +196,16 @@ export function KidsRegistry() {
       >
         <UserPlus className="size-6" />
       </Link>
+
+      {/* Check-in/out modal */}
+      {modalKid && (
+        <CheckInModal
+          kid={modalKid}
+          action={modalKid.status === "in" ? "out" : "in"}
+          onClose={handleModalClose}
+          onConfirm={handleModalConfirm}
+        />
+      )}
     </main>
   )
 }

@@ -14,7 +14,7 @@ function minutesSince(entryTime: string): number {
   return now.getHours() * 60 + now.getMinutes() - (h * 60 + m)
 }
 
-export function KidGridCard({ kid }: { kid: Kid }) {
+export function KidGridCard({ kid, onCheckAction }: { kid: Kid; onCheckAction?: (kid: Kid) => void }) {
   const hasAlert = Boolean(kid.allergies || kid.medical)
   const alertText = kid.allergies ?? kid.medical ?? ""
   const longStay = kid.status === "in" && kid.entryTime && minutesSince(kid.entryTime) > 180
@@ -77,12 +77,12 @@ export function KidGridCard({ kid }: { kid: Kid }) {
 
       <div className="mt-1 flex items-center gap-2">
         {kid.status === "in" ? (
-          <Button variant="outline" size="sm" className="flex-1">
+          <Button variant="outline" size="sm" className="flex-1" onClick={() => onCheckAction?.(kid)}>
             <LogOut data-icon="inline-start" />
             Check out
           </Button>
         ) : (
-          <Button variant="default" size="sm" className="flex-1">
+          <Button variant="default" size="sm" className="flex-1" onClick={() => onCheckAction?.(kid)}>
             <LogIn data-icon="inline-start" />
             Check in
           </Button>

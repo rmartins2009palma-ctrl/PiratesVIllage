@@ -14,7 +14,7 @@ function minutesSince(entryTime: string): number {
   return now.getHours() * 60 + now.getMinutes() - (h * 60 + m)
 }
 
-export function KidListRow({ kid }: { kid: Kid }) {
+export function KidListRow({ kid, onCheckAction }: { kid: Kid; onCheckAction?: (kid: Kid) => void }) {
   const hasAlert = Boolean(kid.allergies || kid.medical)
   const alertText = kid.allergies ?? kid.medical ?? ""
   const longStay = kid.status === "in" && kid.entryTime && minutesSince(kid.entryTime) > 180
@@ -77,12 +77,12 @@ export function KidListRow({ kid }: { kid: Kid }) {
           {kid.visitsThisStay} visits
         </span>
         {kid.status === "in" ? (
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => onCheckAction?.(kid)}>
             <LogOut data-icon="inline-start" />
             <span className="hidden sm:inline">Check out</span>
           </Button>
         ) : (
-          <Button variant="default" size="sm">
+          <Button variant="default" size="sm" onClick={() => onCheckAction?.(kid)}>
             <LogIn data-icon="inline-start" />
             <span className="hidden sm:inline">Check in</span>
           </Button>
