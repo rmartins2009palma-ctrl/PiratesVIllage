@@ -1,0 +1,120 @@
+"use client"
+
+import { useState } from "react"
+import {
+  LayoutDashboard,
+  Users,
+  LogIn,
+  BarChart3,
+  Settings,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Anchor,
+} from "lucide-react"
+import { cn } from "@/lib/utils"
+import { HOTEL } from "@/lib/mock-data"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+
+interface NavItem {
+  label: string
+  icon: typeof LayoutDashboard
+  active?: boolean
+}
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "Dashboard", icon: LayoutDashboard, active: true },
+  { label: "Kids", icon: Users },
+  { label: "Check-in", icon: LogIn },
+  { label: "Statistics", icon: BarChart3 },
+  { label: "Settings", icon: Settings },
+]
+
+export function AppSidebar() {
+  const [collapsed, setCollapsed] = useState(false)
+
+  return (
+    <aside
+      className={cn(
+        "flex flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-in-out",
+        collapsed ? "w-[76px]" : "w-64",
+      )}
+    >
+      {/* Brand */}
+      <div
+        className={cn(
+          "flex h-20 items-center gap-3 border-b border-sidebar-border px-4",
+          collapsed && "justify-center px-0",
+        )}
+      >
+        <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
+          <Anchor className="size-6" strokeWidth={2.25} />
+        </div>
+        {!collapsed && (
+          <div className="min-w-0">
+            <p className="truncate font-serif text-base font-semibold leading-tight text-sidebar-primary-foreground/95">
+              {HOTEL.name}
+            </p>
+            <p className="truncate text-xs uppercase tracking-[0.18em] text-sidebar-foreground/60">
+              {HOTEL.club}
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Navigation */}
+      <nav className="flex flex-1 flex-col gap-1.5 p-3" aria-label="Primary">
+        {NAV_ITEMS.map((item) => {
+          const Icon = item.icon
+          const link = (
+            <a
+              key={item.label}
+              href="#"
+              aria-current={item.active ? "page" : undefined}
+              className={cn(
+                "group flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors",
+                collapsed && "justify-center px-0",
+                item.active
+                  ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+              )}
+            >
+              <Icon className="size-5 shrink-0" strokeWidth={item.active ? 2.4 : 2} />
+              {!collapsed && <span>{item.label}</span>}
+            </a>
+          )
+
+          return collapsed ? (
+            <Tooltip key={item.label}>
+              <TooltipTrigger render={link} />
+              <TooltipContent side="right">{item.label}</TooltipContent>
+            </Tooltip>
+          ) : (
+            link
+          )
+        })}
+      </nav>
+
+      {/* Collapse toggle */}
+      <div className="border-t border-sidebar-border p-3">
+        <button
+          type="button"
+          onClick={() => setCollapsed((c) => !c)}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className={cn(
+            "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+            collapsed && "justify-center px-0",
+          )}
+        >
+          {collapsed ? (
+            <PanelLeftOpen className="size-5 shrink-0" />
+          ) : (
+            <>
+              <PanelLeftClose className="size-5 shrink-0" />
+              <span>Collapse</span>
+            </>
+          )}
+        </button>
+      </div>
+    </aside>
+  )
+}
