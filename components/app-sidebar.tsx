@@ -1,6 +1,8 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
   Users,
@@ -18,19 +20,20 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip
 interface NavItem {
   label: string
   icon: typeof LayoutDashboard
-  active?: boolean
+  href: string
 }
 
 const NAV_ITEMS: NavItem[] = [
-  { label: "Dashboard", icon: LayoutDashboard, active: true },
-  { label: "Kids", icon: Users },
-  { label: "Check-in", icon: LogIn },
-  { label: "Statistics", icon: BarChart3 },
-  { label: "Settings", icon: Settings },
+  { label: "Dashboard", icon: LayoutDashboard, href: "/" },
+  { label: "Kids", icon: Users, href: "/kids" },
+  { label: "Check-in", icon: LogIn, href: "/checkin" },
+  { label: "Statistics", icon: BarChart3, href: "/statistics" },
+  { label: "Settings", icon: Settings, href: "/settings" },
 ]
 
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false)
+  const pathname = usePathname()
 
   return (
     <aside
@@ -65,22 +68,23 @@ export function AppSidebar() {
       <nav className="flex flex-1 flex-col gap-1.5 p-3" aria-label="Primary">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon
+          const isActive = pathname === item.href
           const link = (
-            <a
+            <Link
               key={item.label}
-              href="#"
-              aria-current={item.active ? "page" : undefined}
+              href={item.href}
+              aria-current={isActive ? "page" : undefined}
               className={cn(
                 "group flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors",
                 collapsed && "justify-center px-0",
-                item.active
+                isActive
                   ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
                   : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               )}
             >
-              <Icon className="size-5 shrink-0" strokeWidth={item.active ? 2.4 : 2} />
+              <Icon className="size-5 shrink-0" strokeWidth={isActive ? 2.4 : 2} />
               {!collapsed && <span>{item.label}</span>}
-            </a>
+            </Link>
           )
 
           return collapsed ? (

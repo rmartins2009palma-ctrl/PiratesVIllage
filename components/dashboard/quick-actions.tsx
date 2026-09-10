@@ -1,11 +1,12 @@
+import Link from "next/link"
 import { UserPlus, Search, ArrowRight } from "lucide-react"
 
 export function QuickActions() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
       {/* Primary: new registration */}
-      <button
-        type="button"
+      <Link
+        href="/register"
         className="group flex min-h-[132px] flex-col justify-between rounded-2xl bg-primary p-6 text-left text-primary-foreground shadow-sm transition-all hover:shadow-lg hover:brightness-110"
       >
         <div className="flex items-center justify-between">
@@ -20,11 +21,11 @@ export function QuickActions() {
             Enrol a child for the first time this season
           </p>
         </div>
-      </button>
+      </Link>
 
       {/* Secondary: quick check-in */}
-      <button
-        type="button"
+      <Link
+        href="/kids"
         className="group flex min-h-[132px] flex-col justify-between rounded-2xl border-2 border-accent bg-accent/10 p-6 text-left text-foreground shadow-sm transition-all hover:bg-accent/20 hover:shadow-lg"
       >
         <div className="flex items-center justify-between">
@@ -39,7 +40,7 @@ export function QuickActions() {
             Find a registered child and sign them in
           </p>
         </div>
-      </button>
+      </Link>
     </div>
   )
 }

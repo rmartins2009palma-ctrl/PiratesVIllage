@@ -203,12 +203,34 @@
   animation: wave-drift 1.6s linear infinite;
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, var(--color-secondary) 25%, var(--color-muted) 50%, var(--color-secondary) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse-attention {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 160, 86, 0); }
+  50% { box-shadow: 0 0 0 4px rgba(217, 160, 86, 0.25); }
+}
+
+.animate-pulse-attention {
+  animation: pulse-attention 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-compass-spin,
   .animate-sail-across,
   .animate-pop-in,
   .animate-confetti-fall,
-  .animate-wave-drift {
+  .animate-wave-drift,
+  .animate-shimmer,
+  .animate-pulse-attention {
     animation: none;
   }
 }
