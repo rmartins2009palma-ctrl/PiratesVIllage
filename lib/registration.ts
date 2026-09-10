@@ -75,6 +75,79 @@ export function createInitialDraft(): RegistrationDraft {
   }
 }
 
+// --- "Add sibling" prefill -------------------------------------------------
+// The child detail page links into this form carrying the room and primary
+// guardian, so both sides agree on the query-parameter names here.
+
+export const SIBLING_PARAMS = {
+  room: "room",
+  guardianName: "primaryGuardianName",
+  guardianPhone: "primaryGuardianPhone",
+  guardianEmail: "primaryGuardianEmail",
+} as const
+
+export interface SiblingPrefill {
+  room: string
+  guardianName: string
+  guardianPhone: string
+  guardianEmail: string
+}
+
+export function buildSiblingHref(prefill: Partial<SiblingPrefill>): string {
+  const params = new URLSearchParams()
+  if (prefill.room) params.set(SIBLING_PARAMS.room, prefill.room)
+  if (prefill.guardianName) params.set(SIBLING_PARAMS.guardianName, prefill.guardianName)
+  if (prefill.guardianPhone) params.set(SIBLING_PARAMS.guardianPhone, prefill.guardianPhone)
+  if (prefill.guardianEmail) params.set(SIBLING_PARAMS.guardianEmail, prefill.guardianEmail)
+  const query = params.toString()
+  return query ? `/register?${query}` : "/register"
+}
+
+/** Reads the prefill off a URLSearchParams-like object; empty values are ignored. */
+export function readSiblingPrefill(source: {
+  get(key: string): string | null
+}): Partial<SiblingPrefill> {
+  const pick = (key: string) => source.get(key)?.trim() || undefined
+  return {
+    room: pick(SIBLING_PARAMS.room),
+    guardianName: pick(SIBLING_PARAMS.guardianName),
+    guardianPhone: pick(SIBLING_PARAMS.guardianPhone),
+    guardianEmail: pick(SIBLING_PARAMS.guardianEmail),
+  }
+}
+
+export function hasSiblingPrefill(prefill: Partial<SiblingPrefill>): boolean {
+  return Boolean(prefill.room || prefill.guardianName || prefill.guardianPhone)
+}
+
+/** Seeds a fresh draft with the room and primary guardian of an existing sibling. */
+export function draftFromPrefill(prefill: Partial<SiblingPrefill>): RegistrationDraft {
+  const draft = createInitialDraft()
+  if (prefill.room) draft.room = prefill.room
+
+  const primary = draft.guardians[0]
+  if (primary) {
+    if (prefill.guardianName) primary.fullName = prefill.guardianName
+    if (prefill.guardianPhone) {
+      const { countryCode, phone } = splitPhone(prefill.guardianPhone)
+      primary.countryCode = countryCode
+      primary.phone = phone
+    }
+    if (prefill.guardianEmail) primary.email = prefill.guardianEmail
+  }
+  return draft
+}
+
+/** Splits "+44 7375 863237" into a known dialling code and the national number. */
+export function splitPhone(raw: string): { countryCode: string; phone: string } {
+  const trimmed = raw.trim()
+  const match = COUNTRY_CODES.filter((c) => trimmed.startsWith(c.code)).sort(
+    (a, b) => b.code.length - a.code.length,
+  )[0]
+  if (!match) return { countryCode: "+44", phone: formatPhone(trimmed) }
+  return { countryCode: match.code, phone: formatPhone(trimmed.slice(match.code.length)) }
+}
+
 // Group the national number into readable blocks of up to 4 digits.
 export function formatPhone(raw: string): string {
   const digits = raw.replace(/\D/g, "").slice(0, 12)

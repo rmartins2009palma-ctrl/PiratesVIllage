@@ -16,7 +16,17 @@ export interface Guardian {
   phone: string
   relationship: Relationship
   isPrimary: boolean
+  email?: string
+  /** ISO date the guardian signed the consent form (primary guardians) */
+  consentSignedOn?: string
+  /** ISO date an additional authorized adult was added to the file */
+  addedOn?: string
+  /** Check-ins / check-outs this guardian has signed during the current stay */
+  signaturesThisStay?: number
 }
+
+/** "anomaly" flags a completed visit that needs a second look (late pickup, etc.) */
+export type VisitStatus = "completed" | "ongoing" | "anomaly"
 
 export interface Visit {
   id: string
@@ -27,6 +37,12 @@ export interface Visit {
   /** minutes, null while still in club */
   durationMinutes: number | null
   signedBy: string
+  /** Animator who recorded the visit */
+  registeredBy?: string
+  /** Derived from checkOut when absent — see visitStatus() */
+  status?: VisitStatus
+  /** Why the visit was flagged; only meaningful when status === "anomaly" */
+  anomalyReason?: string
 }
 
 export interface StaffNote {
@@ -34,6 +50,14 @@ export interface StaffNote {
   author: string
   timestamp: string
   text: string
+}
+
+export interface ConsentRecord {
+  version: string
+  signedBy: string
+  /** ISO date */
+  signedOn: string
+  method: string
 }
 
 export interface Kid {
@@ -47,8 +71,16 @@ export interface Kid {
   entryTime?: string
   allergies?: string
   medical?: string
+  /** Illness or disability declared at registration */
+  disability?: string
   notes?: string
   registeredOn: string
+  /** Animator who took the registration */
+  registeredBy?: string
+  nationality?: string
+  language?: string
+  season?: string
+  consent?: ConsentRecord
   lastVisit: string
   visitsThisStay: number
   guardians: Guardian[]
@@ -89,21 +121,66 @@ export const KIDS: Kid[] = [
     room: "214",
     status: "in",
     entryTime: "09:45",
-    allergies: "Peanuts and tree nuts — carries an EpiPen at reception.",
-    registeredOn: "2026-09-07",
+    allergies: "Peanuts, tree nuts — carries an EpiPen at reception, dairy intolerant",
+    registeredOn: "2026-09-05",
+    registeredBy: "Marina Costa",
+    nationality: "British",
+    language: "English",
+    season: "Summer 2026",
+    consent: {
+      version: "Terms v.1.2 — 09/2026",
+      signedBy: "Sarah Thompson",
+      signedOn: "2026-09-05",
+      method: "Handwritten signature on tablet",
+    },
     lastVisit: "2026-09-10",
-    visitsThisStay: 7,
+    visitsThisStay: 8,
     guardians: [
-      { id: "g1", fullName: "Sarah Thompson", phone: "+44 7700 900142", relationship: "Mother", isPrimary: true },
-      { id: "g2", fullName: "David Thompson", phone: "+44 7700 900188", relationship: "Father", isPrimary: false },
+      {
+        id: "g1",
+        fullName: "Sarah Thompson",
+        phone: "+44 7375 863237",
+        email: "sarah.thompson@example.com",
+        relationship: "Mother",
+        isPrimary: true,
+        consentSignedOn: "2026-09-05",
+        signaturesThisStay: 12,
+      },
+      {
+        id: "g2",
+        fullName: "Mark Thompson",
+        phone: "+44 7375 863238",
+        email: "mark.thompson@example.com",
+        relationship: "Father",
+        isPrimary: false,
+        addedOn: "2026-09-06",
+        signaturesThisStay: 3,
+      },
     ],
     history: [
-      { id: "v1", date: "2026-09-10", checkIn: "09:45", checkOut: null, durationMinutes: null, signedBy: "Sarah Thompson" },
-      { id: "v2", date: "2026-09-09", checkIn: "10:10", checkOut: "12:30", durationMinutes: 140, signedBy: "Sarah Thompson" },
-      { id: "v3", date: "2026-09-08", checkIn: "16:05", checkOut: "18:15", durationMinutes: 130, signedBy: "David Thompson" },
+      { id: "v1", date: "2026-09-10", checkIn: "09:45", checkOut: null, durationMinutes: null, signedBy: "Sarah Thompson", registeredBy: "Marina Costa", status: "ongoing" },
+      { id: "v1b", date: "2026-09-10", checkIn: "07:30", checkOut: "08:50", durationMinutes: 80, signedBy: "Mark Thompson", registeredBy: "Tom Becker" },
+      { id: "v2", date: "2026-09-09", checkIn: "15:20", checkOut: "18:40", durationMinutes: 200, signedBy: "Sarah Thompson", registeredBy: "Marina Costa" },
+      { id: "v2b", date: "2026-09-09", checkIn: "10:10", checkOut: "12:30", durationMinutes: 140, signedBy: "Sarah Thompson", registeredBy: "Marina Costa" },
+      {
+        id: "v3",
+        date: "2026-09-08",
+        checkIn: "16:05",
+        checkOut: "18:15",
+        durationMinutes: 130,
+        signedBy: "Mark Thompson",
+        registeredBy: "Tom Becker",
+        status: "anomaly",
+        anomalyReason: "Collected 15 minutes after the club's 18:00 closing time.",
+      },
+      { id: "v3b", date: "2026-09-08", checkIn: "09:30", checkOut: "12:00", durationMinutes: 150, signedBy: "Sarah Thompson", registeredBy: "Marina Costa" },
+      { id: "v4", date: "2026-09-06", checkIn: "10:00", checkOut: "14:20", durationMinutes: 260, signedBy: "Sarah Thompson", registeredBy: "Marina Costa" },
+      { id: "v5", date: "2026-09-05", checkIn: "14:00", checkOut: "15:30", durationMinutes: 90, signedBy: "Sarah Thompson", registeredBy: "Marina Costa" },
     ],
     staffNotes: [
-      { id: "n1", author: "Marina Costa", timestamp: "2026-09-08 16:20", text: "Loves the treasure hunt activity. Very shy at first, warms up quickly." },
+      { id: "n1", author: "Marina Costa", timestamp: "2026-09-08 16:20", text: "Loves the treasure hunt activity. Very shy at first, warms up quickly. Prefers quieter craft corners over loud group games." },
+      { id: "n1b", author: "Tom Becker", timestamp: "2026-09-07 11:05", text: "Excellent with younger children — helped Zara settle in during storytime. Natural little leader." },
+      { id: "n1c", author: "Marina Costa", timestamp: "2026-09-05 10:15", text: "First day aboard. Sarah handed the EpiPen to reception — stored in the red medical box. Emma knows how to flag a reaction herself." },
     ],
   },
   {
@@ -254,14 +331,42 @@ export const KIDS: Kid[] = [
     entryTime: "09:50",
     allergies: "Gluten sensitivity.",
     registeredOn: "2026-09-10",
+    registeredBy: "Marina Costa",
+    nationality: "British",
+    language: "English",
+    season: "Summer 2026",
+    consent: {
+      version: "Terms v.1.2 — 09/2026",
+      signedBy: "Sarah Thompson",
+      signedOn: "2026-09-10",
+      method: "Handwritten signature on tablet",
+    },
     lastVisit: "2026-09-10",
     visitsThisStay: 1,
     guardians: [
-      { id: "g11", fullName: "Sarah Thompson", phone: "+44 7700 900142", relationship: "Mother", isPrimary: true },
-      { id: "g12", fullName: "David Thompson", phone: "+44 7700 900188", relationship: "Father", isPrimary: false },
+      {
+        id: "g11",
+        fullName: "Sarah Thompson",
+        phone: "+44 7375 863237",
+        email: "sarah.thompson@example.com",
+        relationship: "Mother",
+        isPrimary: true,
+        consentSignedOn: "2026-09-10",
+        signaturesThisStay: 1,
+      },
+      {
+        id: "g12",
+        fullName: "Mark Thompson",
+        phone: "+44 7375 863238",
+        email: "mark.thompson@example.com",
+        relationship: "Father",
+        isPrimary: false,
+        addedOn: "2026-09-10",
+        signaturesThisStay: 0,
+      },
     ],
     history: [
-      { id: "v13", date: "2026-09-10", checkIn: "09:50", checkOut: null, durationMinutes: null, signedBy: "Sarah Thompson" },
+      { id: "v13", date: "2026-09-10", checkIn: "09:50", checkOut: null, durationMinutes: null, signedBy: "Sarah Thompson", registeredBy: "Marina Costa", status: "ongoing" },
     ],
     staffNotes: [],
   },
@@ -484,4 +589,68 @@ export function formatDuration(minutes: number | null): string {
 export function formatDate(iso: string): string {
   const [y, m, d] = iso.split("-")
   return `${d}/${m}/${y}`
+}
+
+/** Older records predate the status field — a missing check-out means still aboard. */
+export function visitStatus(visit: Visit): VisitStatus {
+  return visit.status ?? (visit.checkOut === null ? "ongoing" : "completed")
+}
+
+export function primaryGuardian(kid: Pick<Kid, "guardians">): Guardian | undefined {
+  return kid.guardians.find((g) => g.isPrimary) ?? kid.guardians[0]
+}
+
+function surname(fullName: string): string {
+  const parts = fullName.trim().split(/\s+/)
+  return (parts[parts.length - 1] ?? "").toLowerCase()
+}
+
+/**
+ * Siblings share a room and a primary-guardian surname. The child themselves is
+ * never returned, so the count reads as "how many other children in this family".
+ */
+export function getSiblings(kid: Kid): Kid[] {
+  const mine = primaryGuardian(kid)
+  if (!mine) return []
+  const familyName = surname(mine.fullName)
+  return KIDS.filter((other) => {
+    if (other.id === kid.id) return false
+    if (other.room !== kid.room) return false
+    const theirs = primaryGuardian(other)
+    return theirs ? surname(theirs.fullName) === familyName : false
+  })
+}
+
+export interface VisitStats {
+  total: number
+  averageMinutes: number | null
+  longestMinutes: number | null
+  favoriteWindow: string
+}
+
+/** Buckets check-in times so the Quick stats card can name a favourite window. */
+export function getVisitStats(kid: Kid): VisitStats {
+  const finished = kid.history.filter((v) => v.durationMinutes != null)
+  const durations = finished.map((v) => v.durationMinutes as number)
+  const total = durations.reduce((sum, d) => sum + d, 0)
+
+  const buckets = { Mornings: 0, Afternoons: 0, Evenings: 0 }
+  for (const visit of kid.history) {
+    const hour = Number(visit.checkIn.split(":")[0])
+    if (hour < 12) buckets.Mornings += 1
+    else if (hour < 17) buckets.Afternoons += 1
+    else buckets.Evenings += 1
+  }
+
+  const [label, count] = Object.entries(buckets).sort((a, b) => b[1] - a[1])[0]
+  const range = { Mornings: "09:00–12:00", Afternoons: "12:00–17:00", Evenings: "after 17:00" }[
+    label as keyof typeof buckets
+  ]
+
+  return {
+    total: kid.history.length,
+    averageMinutes: durations.length ? Math.round(total / durations.length) : null,
+    longestMinutes: durations.length ? Math.max(...durations) : null,
+    favoriteWindow: count === 0 ? "Not enough visits yet" : `${label} (mostly ${range})`,
+  }
 }

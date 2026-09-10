@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
-import { AlertCircle, ArrowLeft, CheckCircle2, Save } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { AlertCircle, ArrowLeft, CheckCircle2, Save, Users, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ProgressSteps } from "@/components/register/progress-steps"
 import { ChildSection } from "@/components/register/child-section"
@@ -12,6 +13,9 @@ import { SuccessOverlay } from "@/components/register/success-overlay"
 import {
   createGuardian,
   createInitialDraft,
+  draftFromPrefill,
+  hasSiblingPrefill,
+  readSiblingPrefill,
   type GuardianDraft,
   type RegistrationDraft,
 } from "@/lib/registration"
@@ -40,7 +44,13 @@ function nowTime() {
 }
 
 export function RegistrationForm() {
-  const [draft, setDraft] = useState<RegistrationDraft>(createInitialDraft)
+  // Arriving from a child profile via "Add sibling" seeds the room and primary guardian.
+  const searchParams = useSearchParams()
+  const prefill = useMemo(() => readSiblingPrefill(searchParams), [searchParams])
+  const isSibling = hasSiblingPrefill(prefill)
+
+  const [draft, setDraft] = useState<RegistrationDraft>(() => draftFromPrefill(prefill))
+  const [bannerDismissed, setBannerDismissed] = useState(false)
   const [signed, setSigned] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
@@ -160,6 +170,30 @@ export function RegistrationForm() {
               </p>
             </div>
           </div>
+
+          {isSibling && !bannerDismissed && (
+            <div className="flex items-start gap-3 rounded-xl border border-accent/40 bg-accent/8 p-3">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-accent/15 text-accent-foreground">
+                <Users className="size-4" />
+              </span>
+              <p className="min-w-0 flex-1 pt-1.5 text-sm text-foreground">
+                {prefill.room && (
+                  <>
+                    Adding a sibling to <span className="font-semibold">Room {prefill.room}</span>.{" "}
+                  </>
+                )}
+                {prefill.guardianName && "Primary guardian pre-filled."}
+              </p>
+              <button
+                type="button"
+                onClick={() => setBannerDismissed(true)}
+                aria-label="Dismiss sibling prefill notice"
+                className="flex size-8 shrink-0 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                <X className="size-4" />
+              </button>
+            </div>
+          )}
 
           <div className="sticky top-0 z-10 -mx-4 bg-background/80 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
             <ProgressSteps current={currentStep} completed={completed} />
