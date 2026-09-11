@@ -41,9 +41,9 @@ Two API differences bite constantly:
 | `/register` | Registration form |
 | `/statistics` | "Ship's Log" |
 | `/login` | Entry point + middleware auth |
+| `/settings` | A window onto `HOTEL_CONFIG` (see §5) |
 
-**Still pending: `/settings`.** The sidebar already links to it, so it is
-currently a 404 — the same trap `/kids/[id]` was in before it was built.
+Every route the sidebar links to now exists.
 
 ---
 
@@ -290,6 +290,12 @@ along with `tsconfig.tsbuildinfo`.
 - Custom date range (Statistics) — picker wired, still returns week data.
 - "Forgot password" — no action.
 - Statistics empty state exists in code but no mock range reaches it.
+- **Settings toggles preview but do not persist.** They read their initial
+  state from `HOTEL_CONFIG` and are interactive, so a manager can see exactly
+  what each switch governs, but there is nowhere to save to yet. The page says
+  so in a banner rather than pretending. Persisting per hotel is Phase B work,
+  and the toggles are already shaped like the rows a `hotel_settings` table
+  would hold.
 
 ### Never visually verified
 
@@ -299,8 +305,15 @@ and visual balance were never seen.**
 
 ### Next
 
-1. **`/settings`** — linked from the sidebar, currently 404. Natural home for
-   a UI over `HOTEL_CONFIG`, turning the hard-coded flags into something a
-   hotel manager can toggle.
-2. **Phase B — Supabase**: real auth, replace `getStats`, replace `KIDS`,
-   real search.
+**Phase B — Supabase.** Four pieces, in dependency order:
+
+1. **Auth** — replace `lib/auth.ts`. The `pv_session` cookie and the middleware
+   contract can stay as they are; only the credential check changes.
+2. **`hotel_settings`** — persist what `/settings` already renders. This is the
+   smallest real table and unblocks the config layer end to end.
+3. **Data** — replace `KIDS` with queries. Guardians, visits and staff notes
+   are already separate types, so they map to tables directly.
+4. **`getStats(range)`** — the one function the whole Statistics page reads
+   through. Aggregations move server-side; no component changes.
+
+Real search (currently a client-side filter over `KIDS`) follows from 3.
