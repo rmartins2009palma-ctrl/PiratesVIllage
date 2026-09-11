@@ -143,14 +143,8 @@ export function RegistrationForm() {
               <ArrowLeft data-icon="inline-start" className="size-4" />
               Back to dashboard
             </Link>
-            <div>
-              <h1 className="text-balance font-serif text-3xl font-bold text-foreground">
-                New crew registration
-              </h1>
-              <p className="mt-1 text-muted-foreground">
-                Enrol a child in the Pirates Village Kids Club for the first time this season.
-              </p>
-            </div>
+            {/* No subtitle: the sidebar already says which page this is. */}
+            <h1 className="font-serif text-3xl font-bold text-foreground">New registration</h1>
           </div>
 
           {isSibling && !bannerDismissed && (
