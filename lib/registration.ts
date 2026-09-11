@@ -1,5 +1,7 @@
 // Types, constants and helpers for the New Child Registration flow (frontend-only mock).
 
+import { HIDDEN_FIELD_DEFAULTS, isFieldVisible } from "./hotel-config"
+
 export interface GuardianDraft {
   id: string
   fullName: string
@@ -56,7 +58,11 @@ export function createGuardian(id: string): GuardianDraft {
     fullName: "",
     countryCode: "+44",
     phone: "",
-    relationship: "",
+    // When the hotel hides the picker nobody can choose a value, so seed the
+    // documented default and keep saved guardians valid.
+    relationship: isFieldVisible("guardianRelationship")
+      ? ""
+      : HIDDEN_FIELD_DEFAULTS.guardianRelationship,
     email: "",
   }
 }

@@ -16,6 +16,7 @@ import {
 } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { buttonVariants } from "@/components/ui/button"
+import { HOTEL_CONFIG } from "@/lib/hotel-config"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   type Kid,
@@ -95,6 +96,7 @@ function StatRow({
 }
 
 export function TabOverview({ kid }: { kid: Kid }) {
+  const detail = HOTEL_CONFIG.displayFields.childDetail
   const siblings = getSiblings(kid)
   const stats = getVisitStats(kid)
   const allergyList = (kid.allergies ?? "")
@@ -125,9 +127,11 @@ export function TabOverview({ kid }: { kid: Kid }) {
                 </>
               }
             />
-            <DataField label="Season" value={kid.season ?? "—"} />
-            <DataField label="Nationality" value={kid.nationality ?? "—"} />
-            <DataField label="Language" value={kid.language ?? "—"} />
+            {detail.showSeason && <DataField label="Season" value={kid.season ?? "—"} />}
+            {detail.showNationality && (
+              <DataField label="Nationality" value={kid.nationality ?? "—"} />
+            )}
+            {detail.showLanguage && <DataField label="Language" value={kid.language ?? "—"} />}
           </CardContent>
         </Card>
 

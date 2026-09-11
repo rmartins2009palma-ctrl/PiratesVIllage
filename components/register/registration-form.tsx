@@ -19,6 +19,7 @@ import {
   type GuardianDraft,
   type RegistrationDraft,
 } from "@/lib/registration"
+import { isFieldRequired } from "@/lib/hotel-config"
 import { cn } from "@/lib/utils"
 
 function computeErrors(draft: RegistrationDraft, signed: boolean): Record<string, string> {
@@ -31,7 +32,11 @@ function computeErrors(draft: RegistrationDraft, signed: boolean): Record<string
   draft.guardians.forEach((g) => {
     if (!g.fullName.trim()) errors[`g:${g.id}:fullName`] = "Enter the guardian's name."
     if (g.phone.replace(/\D/g, "").length < 6) errors[`g:${g.id}:phone`] = "Enter a valid phone number."
-    if (!g.relationship) errors[`g:${g.id}:relationship`] = "Select a relationship."
+    // A hidden field must never block the form — isFieldRequired() already
+    // refuses to require anything invisible.
+    if (isFieldRequired("guardianRelationship") && !g.relationship) {
+      errors[`g:${g.id}:relationship`] = "Select a relationship."
+    }
   })
 
   if (!draft.consent) errors.consent = "You must accept the terms to continue."
@@ -73,7 +78,10 @@ export function RegistrationForm() {
     () => [
       !!draft.firstName.trim() && !!draft.lastName.trim() && !!draft.age && !!draft.room.trim(),
       draft.guardians.every(
-        (g) => g.fullName.trim() && g.phone.replace(/\D/g, "").length >= 6 && g.relationship,
+        (g) =>
+          g.fullName.trim() &&
+          g.phone.replace(/\D/g, "").length >= 6 &&
+          (!isFieldRequired("guardianRelationship") || g.relationship),
       ),
       draft.consent && signed,
     ],

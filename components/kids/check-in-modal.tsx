@@ -16,6 +16,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { BRAND_INK } from "@/lib/brand-constants"
+import { isFieldVisible } from "@/lib/hotel-config"
 import { type Kid, fullName, kidInitials, formatDuration } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 
@@ -78,6 +79,10 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
 
   // If kid is already "in" and action is "in", show the warning variant
   const alreadyIn = action === "in" && kid.status === "in"
+
+  // The crew already knows who each guardian is; the hotel can switch the
+  // relationship label back on from HOTEL_CONFIG.
+  const showRelationship = isFieldVisible("guardianRelationship")
 
   const isIn = action === "in"
   const accentColor = isIn ? "success" : "primary"
@@ -320,7 +325,9 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
           <div className="mb-4">
             <p className="mb-2 text-sm font-medium text-foreground">Guardians on file</p>
             <p className="mb-3 text-xs text-muted-foreground">
-              {kid.guardians.map((g) => `${g.fullName} (${g.relationship})`).join(", ")}
+              {kid.guardians
+                .map((g) => (showRelationship ? `${g.fullName} (${g.relationship})` : g.fullName))
+                .join(", ")}
             </p>
           </div>
 
@@ -389,8 +396,9 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-foreground">{g.fullName}</p>
                         <p className="text-xs text-muted-foreground">
-                          {g.relationship}
-                          {g.isPrimary && " · Primary"}
+                          {showRelationship && g.relationship}
+                          {showRelationship && g.isPrimary && " · "}
+                          {g.isPrimary && "Primary"}
                         </p>
                       </div>
                     </button>

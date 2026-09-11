@@ -5,6 +5,7 @@ import { BadgeCheck, CheckCircle2, Mail, Phone, UserPlus } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { HOTEL_CONFIG } from "@/lib/hotel-config"
 import { type Guardian, formatDate } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 
@@ -67,7 +68,11 @@ function GuardianCard({
             <h3 className="font-serif text-lg font-bold leading-tight text-foreground">
               {guardian.fullName}
             </h3>
-            <Badge variant="secondary">{guardian.relationship}</Badge>
+            {/* Relationship is descriptive and hideable; the badges below are
+                functional roles and always render. */}
+            {HOTEL_CONFIG.displayFields.childDetail.showGuardianRelationship && (
+              <Badge variant="secondary">{guardian.relationship}</Badge>
+            )}
             {guardian.isPrimary ? (
               <Badge className="bg-accent uppercase tracking-wide text-accent-foreground">
                 <BadgeCheck data-icon="inline-start" />

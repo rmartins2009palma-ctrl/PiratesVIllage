@@ -1,5 +1,6 @@
 "use client"
 
+import { isFieldVisible } from "@/lib/hotel-config"
 import { LifeBuoy, Plus, ShieldCheck, Trash2 } from "lucide-react"
 import {
   Card,
@@ -52,6 +53,7 @@ function GuardianFields({
   showEmail: boolean
 }) {
   const key = (field: string) => `g:${guardian.id}:${field}`
+  const showRelationship = isFieldVisible("guardianRelationship")
 
   return (
     <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -105,6 +107,7 @@ function GuardianFields({
         {errors[key("phone")] && <FieldError>{errors[key("phone")]}</FieldError>}
       </Field>
 
+      {showRelationship && (
       <Field data-invalid={!!errors[key("relationship")] || undefined}>
         <FieldLabel htmlFor={`${guardian.id}-rel`}>
           Relationship<Req />
@@ -128,6 +131,7 @@ function GuardianFields({
         </Select>
         {errors[key("relationship")] && <FieldError>{errors[key("relationship")]}</FieldError>}
       </Field>
+      )}
 
       {showEmail && (
         <Field>
