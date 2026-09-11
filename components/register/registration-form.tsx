@@ -134,11 +134,13 @@ export function RegistrationForm() {
             <Link
               href="/"
               className={cn(
-                buttonVariants({ variant: "ghost", size: "sm" }),
-                "w-fit text-muted-foreground",
+                buttonVariants({ variant: "outline" }),
+                // A real 44px tap target: this is the way out of a long form,
+                // not a decorative breadcrumb.
+                "h-11 w-fit gap-2 px-4 text-sm font-medium",
               )}
             >
-              <ArrowLeft data-icon="inline-start" />
+              <ArrowLeft data-icon="inline-start" className="size-4" />
               Back to dashboard
             </Link>
             <div>
