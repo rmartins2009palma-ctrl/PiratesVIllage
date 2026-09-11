@@ -197,12 +197,18 @@ export function LoginForm() {
         Contact your kids club manager if you need access
       </p>
 
-      {process.env.NODE_ENV === "development" && (
-        <p className="rounded-xl border border-border bg-secondary/50 px-3 py-2.5 text-center text-xs text-muted-foreground">
-          Demo credentials — any valid email ·{" "}
+      {/* TEMPORARY: shown in production for the validation phase so the hotel
+          can try the deployed app unaccompanied. Remove, or gate behind a build
+          flag, before the real deployment to the hotel. */}
+      <div className="rounded-xl border border-border bg-secondary/50 px-4 py-3 text-center">
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          Demo access
+        </p>
+        <p className="mt-1 text-sm text-muted-foreground">
+          Use any valid email with password:{" "}
           <span className="font-semibold text-foreground">{DEMO_PASSWORD}</span>
         </p>
-      )}
+      </div>
 
       <div className="relative flex justify-center">
         <button
