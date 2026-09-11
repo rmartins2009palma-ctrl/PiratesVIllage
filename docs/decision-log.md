@@ -104,6 +104,25 @@ density work kept its structure:
 xs 13 · sm 15 (body) · base 16 · lg 18 · xl 22 · 2xl 26 · 3xl 32 · 4xl 36 · 5xl 42
 ```
 
+### The brand mark
+
+`public/logo.jpeg` is the real Pirates Village mark: an illustrated skull in
+saturated red, orange and teal on a **white ground, with no transparency**.
+
+It appears in exactly one place — the login panel — inside a cream medallion.
+Framing it is not decoration: a JPEG has no alpha, so dropped straight onto the
+brown panel it would show a white rectangle. The medallion makes that ground
+read as deliberate, and keeps the logo's three saturated hues contained instead
+of loose in a palette built on brown and beige.
+
+It is **not** used on operational screens. That follows the rule set during the
+rebrand: nautical decoration belongs on login, and the day-to-day screens stay
+clean so staff can work fast. The sidebar keeps its plain anchor.
+
+A monochrome SVG redraw was considered and rejected for now: it could not be
+visually verified in this environment, and an unverified hand-drawn version of
+a brand's face is worse than the real asset framed well.
+
 ### Shape
 
 `--radius: 0.875rem` (14px). The whole scale derives from it:

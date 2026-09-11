@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import type { Metadata } from "next"
-import { Anchor } from "lucide-react"
+import Image from "next/image"
 import { CompassRose } from "@/components/compass-rose"
 import { LoginForm } from "@/components/auth/login-form"
 import { HOTEL } from "@/lib/mock-data"
@@ -19,15 +19,27 @@ export default function LoginPage() {
           className="pointer-events-none absolute -right-20 top-1/2 hidden size-[420px] -translate-y-1/2 opacity-[0.06] lg:block"
         />
 
-        <div className="relative flex items-center gap-3">
-          <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-primary-foreground/10">
-            <Anchor className="size-6" strokeWidth={2.25} aria-hidden />
+        <div className="relative flex items-center gap-4">
+          {/* The real mark, framed rather than pasted: the source is a JPEG with
+              no transparency, so a cream medallion makes its white ground read
+              as deliberate instead of as a stray rectangle. */}
+          <span className="flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-secondary p-1 shadow-card sm:size-20">
+            <Image
+              src="/logo.jpeg"
+              alt=""
+              width={160}
+              height={160}
+              priority
+              className="size-full rounded-xl object-contain"
+            />
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold uppercase tracking-[0.18em]">
+            <p className="truncate font-serif text-xl font-bold leading-tight sm:text-2xl">
               {HOTEL.name}
             </p>
-            <p className="truncate text-sm text-primary-foreground/75">Kids Club Manager</p>
+            <p className="truncate text-sm uppercase tracking-[0.18em] text-primary-foreground/75">
+              Kids Club Manager
+            </p>
           </div>
         </div>
 
