@@ -128,7 +128,7 @@ export function RegistrationForm() {
   return (
     <>
       <main ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
-        <div className="form-lg mx-auto flex max-w-3xl flex-col gap-5 px-4 py-6 sm:px-6">
+        <div className="form-lg mx-auto flex w-full max-w-4xl flex-col gap-5 px-4 py-6 sm:px-8">
           {/* Page heading + back */}
           <div className="flex flex-col gap-4">
             <Link
@@ -206,7 +206,7 @@ export function RegistrationForm() {
 
       {/* Sticky action footer */}
       <footer className="border-t border-border bg-card/95 backdrop-blur">
-        <div className="mx-auto flex max-w-3xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        <div className="mx-auto flex w-full max-w-4xl items-center justify-between gap-4 px-4 py-3 sm:px-8">
           <div className="flex items-center gap-2 text-sm">
             {isComplete ? (
               <span className="flex items-center gap-2 font-medium text-success">
