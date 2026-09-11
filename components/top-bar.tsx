@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { ChevronDown, Globe } from "lucide-react"
+import { ChevronDown, Globe, LogOut } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
+import { useRouter } from "next/navigation"
+import { endSession } from "@/lib/auth"
 import { CURRENT_USER, HOTEL } from "@/lib/mock-data"
 
 function useClock() {
@@ -28,6 +30,7 @@ function formatDateTime(date: Date) {
 }
 
 export function TopBar() {
+  const router = useRouter()
   const now = useClock()
   const stamp = now ? formatDateTime(now) : null
 
@@ -64,7 +67,7 @@ export function TopBar() {
         </button>
 
         {/* User */}
-        <div className="flex items-center gap-3 rounded-lg py-1 pl-1 pr-3 transition-colors hover:bg-secondary">
+        <div className="flex items-center gap-1 rounded-lg py-1 pl-1 pr-1 transition-colors hover:bg-secondary">
           <Avatar className="size-10 border-2 border-accent/60">
             <AvatarFallback className="bg-primary text-sm font-semibold text-primary-foreground">
               {CURRENT_USER.initials}
@@ -74,6 +77,18 @@ export function TopBar() {
             <p className="text-sm font-semibold leading-tight text-foreground">{CURRENT_USER.name}</p>
             <p className="text-xs text-muted-foreground">{CURRENT_USER.role}</p>
           </div>
+          {/* Without this the session is a one-way door. */}
+          <button
+            type="button"
+            onClick={() => {
+              endSession()
+              router.replace("/login")
+            }}
+            aria-label="Sign out"
+            className="ml-1 flex size-9 items-center justify-center rounded-full text-muted-foreground transition-colors hover:bg-background hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          >
+            <LogOut className="size-4" aria-hidden />
+          </button>
         </div>
       </div>
     </header>

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -34,9 +34,24 @@ const NAV_ITEMS: NavItem[] = [
 export function AppSidebar() {
   const [collapsed, setCollapsed] = useState(false)
   const pathname = usePathname()
+  const asideRef = useRef<HTMLElement>(null)
+
+  // Working space wins: any press outside the rail folds it away, and pressing
+  // the rail brings it back. Listening on pointerdown (capture) so it settles
+  // before the click lands on whatever was pressed.
+  useEffect(() => {
+    const handle = (event: PointerEvent) => {
+      if (asideRef.current?.contains(event.target as Node)) return
+      setCollapsed(true)
+    }
+    document.addEventListener("pointerdown", handle, true)
+    return () => document.removeEventListener("pointerdown", handle, true)
+  }, [])
 
   return (
     <aside
+      ref={asideRef}
+      onPointerDown={() => setCollapsed(false)}
       className={cn(
         "flex flex-col bg-sidebar text-sidebar-foreground transition-[width] duration-300 ease-in-out",
         collapsed ? "w-[76px]" : "w-64",
@@ -102,6 +117,7 @@ export function AppSidebar() {
       <div className="border-t border-sidebar-border p-3">
         <button
           type="button"
+          onPointerDown={(e) => e.stopPropagation()}
           onClick={() => setCollapsed((c) => !c)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           className={cn(
