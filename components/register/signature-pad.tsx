@@ -1,5 +1,6 @@
 "use client"
 
+import { BRAND_INK } from "@/lib/brand-constants"
 import { useCallback, useEffect, useRef, useState } from "react"
 import SignatureCanvas from "react-signature-canvas"
 import { Check, Eraser, PenLine } from "lucide-react"
@@ -57,14 +58,14 @@ export function SignaturePad({
             signed ? "opacity-0" : "opacity-100",
           )}
         >
-          <span className="font-serif text-xl tracking-wide text-muted-foreground/45">Sign here</span>
+          <span className="font-serif text-xl tracking-wide text-muted-foreground">Sign here</span>
           <div className="h-0.5 w-full animate-wave-drift rounded-full bg-[repeating-linear-gradient(90deg,var(--color-accent)_0_10px,transparent_10px_18px)] opacity-40" />
         </div>
 
         {width > 0 && (
           <SignatureCanvas
             ref={padRef}
-            penColor="#0b2545"
+            penColor={BRAND_INK}
             minWidth={thick ? 1.8 : 0.9}
             maxWidth={thick ? 3.8 : 2.2}
             dotSize={thick ? 2.4 : 1.4}

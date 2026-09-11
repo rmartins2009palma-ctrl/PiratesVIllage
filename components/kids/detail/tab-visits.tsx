@@ -133,7 +133,7 @@ function VisitRow({ visit, isLast }: { visit: Visit; isLast: boolean }) {
           aria-expanded={open}
           className="flex w-full min-h-11 flex-wrap items-center gap-x-3 gap-y-1 rounded-xl px-4 py-2.5 text-left transition-colors hover:bg-secondary/40 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
         >
-          <span className="flex items-center gap-2 font-mono text-sm font-semibold tabular-nums text-foreground">
+          <span className="flex items-center gap-2 text-sm font-semibold tabular-nums text-foreground">
             {visit.checkIn}
             <ArrowRight className="size-3.5 text-muted-foreground" />
             {ongoing ? (
@@ -253,11 +253,11 @@ export function TabVisits({ kid }: { kid: Kid }) {
   return (
     <div className="flex flex-col gap-4">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-border bg-card p-3 shadow-card">
         <div className="flex items-center gap-2">
           <Calendar className="size-4 shrink-0 text-muted-foreground" />
           <Select value={range} onValueChange={(value) => setRange(value as RangeId)}>
-            <SelectTrigger aria-label="Filter visits by date range" className="w-[160px]">
+            <SelectTrigger aria-label="Filter visits by date range" className="w-[176px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -293,7 +293,7 @@ export function TabVisits({ kid }: { kid: Kid }) {
                 <span className="font-serif text-sm font-semibold uppercase tracking-wide text-foreground">
                   {group.label}
                 </span>
-                <span className="font-mono text-xs tabular-nums text-muted-foreground">
+                <span className="text-xs tabular-nums text-muted-foreground">
                   · {formatDate(group.date)}
                 </span>
               </h3>

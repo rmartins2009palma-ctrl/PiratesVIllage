@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import { LogIn, LogOut, Pencil, UserPlus } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   type Kid,
   formatDate,
@@ -15,7 +15,7 @@ import {
 } from "@/lib/mock-data"
 import { buildSiblingHref } from "@/lib/registration"
 import { cn } from "@/lib/utils"
-import { CompassRose } from "./compass-rose"
+import { CompassRose } from "@/components/compass-rose"
 
 const TODAY_ISO = "2026-09-10"
 
@@ -62,7 +62,7 @@ export function ChildHero({ kid, onCheckAction }: { kid: Kid; onCheckAction: (ki
   ]
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-border bg-gradient-to-r from-secondary/70 via-secondary/40 to-card">
+    <section className="relative overflow-hidden rounded-2xl border border-border shadow-card bg-gradient-to-r from-secondary/70 via-secondary/40 to-card">
       <CompassRose className="absolute -right-16 top-1/2 size-[340px] -translate-y-1/2 opacity-[0.07]" />
 
       <div className="relative flex flex-col gap-6 p-6 lg:flex-row lg:items-center lg:justify-between">
@@ -90,8 +90,8 @@ export function ChildHero({ kid, onCheckAction }: { kid: Kid; onCheckAction: (ki
                   <span className="size-2 shrink-0 rounded-full bg-success" />
                   <span className="font-semibold uppercase tracking-wide">In club</span>
                   {kid.entryTime && (
-                    <span className="text-success/80">
-                      since <span className="font-mono tabular-nums">{kid.entryTime}</span>
+                    <span className="text-success">
+                      since <span className="tabular-nums">{kid.entryTime}</span>
                       {elapsed !== null && ` (${formatDuration(elapsed)} elapsed)`}
                     </span>
                   )}
@@ -133,15 +133,18 @@ export function ChildHero({ kid, onCheckAction }: { kid: Kid; onCheckAction: (ki
             {isIn ? "Check-out" : "Check-in"}
           </Button>
 
-          <Button
-            variant="outline"
-            size="lg"
-            className="h-11 justify-center px-5"
-            render={<Link href={addSiblingHref(kid)} />}
+          {/* A real anchor: navigation, not a button. Wrapping a Link in Button
+              would strip native button semantics and Base UI warns about it. */}
+          <Link
+            href={addSiblingHref(kid)}
+            className={cn(
+              buttonVariants({ variant: "outline", size: "lg" }),
+              "h-11 justify-center px-5",
+            )}
           >
             <UserPlus data-icon="inline-start" />
             Add sibling
-          </Button>
+          </Link>
 
           <Button
             variant="ghost"

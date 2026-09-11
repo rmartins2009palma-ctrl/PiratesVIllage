@@ -40,7 +40,7 @@ export function ActivityFeed() {
                     <span className="text-muted-foreground">{cfg.label}</span>
                   </p>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                    <span className="font-mono tabular-nums">{event.time}</span>
+                    <span className="tabular-nums">{event.time}</span>
                     {event.guardian && (
                       <>
                         <span aria-hidden>·</span>

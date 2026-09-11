@@ -70,7 +70,7 @@ export function DetailTabs({ tabs, active, onChange }: DetailTabsProps) {
       role="tablist"
       aria-label="Child details"
       onKeyDown={handleKeyDown}
-      className="grid grid-cols-2 gap-1 rounded-2xl border border-border bg-card p-1.5 sm:grid-cols-4"
+      className="grid grid-cols-2 gap-1 rounded-2xl border border-border bg-card p-1.5 shadow-card sm:grid-cols-4"
     >
       {tabs.map((tab) => {
         const Icon = tab.icon

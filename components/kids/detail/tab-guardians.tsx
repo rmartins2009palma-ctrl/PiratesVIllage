@@ -51,7 +51,7 @@ function GuardianCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border bg-card p-5",
+        "rounded-2xl border bg-card p-5 shadow-card",
         guardian.isPrimary ? "border-accent ring-1 ring-accent/30" : "border-border",
       )}
     >

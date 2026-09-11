@@ -1,2 +1,5 @@
 node_modules/
 .env
+nodejs/
+.next/
+tsconfig.tsbuildinfo

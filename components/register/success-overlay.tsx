@@ -2,7 +2,8 @@
 
 import Link from "next/link"
 import { Check, LogIn, Sailboat, UserPlus } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 
 const CONFETTI = Array.from({ length: 18 }, (_, i) => i)
 const CONFETTI_COLORS = ["var(--color-accent)", "var(--color-primary)", "var(--color-success)"]
@@ -60,7 +61,7 @@ export function SuccessOverlay({
         <div className="mt-5 flex items-center justify-center gap-2 rounded-xl bg-success/10 px-4 py-3 text-success">
           <LogIn className="size-5" />
           <span className="text-sm font-semibold">
-            Checked in at <span className="font-mono tabular-nums">{checkInTime}</span>
+            Checked in at <span className="tabular-nums">{checkInTime}</span>
           </span>
         </div>
 
@@ -69,9 +70,12 @@ export function SuccessOverlay({
             <UserPlus data-icon="inline-start" />
             Add sibling
           </Button>
-          <Button type="button" variant="outline" size="lg" className="w-full" render={<Link href="/" />}>
+          <Link
+            href="/"
+            className={cn(buttonVariants({ variant: "outline", size: "lg" }), "w-full")}
+          >
             Back to dashboard
-          </Button>
+          </Link>
         </div>
       </div>
     </div>

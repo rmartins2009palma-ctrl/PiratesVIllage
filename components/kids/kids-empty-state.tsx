@@ -12,7 +12,7 @@ export function KidsEmptyState({ hasSearch, searchTerm }: { hasSearch: boolean; 
           alt=""
           width={80}
           height={80}
-          className="animate-compass-spin opacity-30"
+          className="opacity-30"
         />
         <div>
           <p className="font-serif text-lg font-semibold text-foreground">

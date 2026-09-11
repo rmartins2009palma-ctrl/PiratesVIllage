@@ -25,7 +25,7 @@ function NoteCard({ note, onDelete }: { note: StaffNote; onDelete: (id: string) 
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <article className="rounded-2xl border border-border bg-card p-5">
+    <article className="rounded-2xl border border-border bg-card p-5 shadow-card">
       <div className="flex items-start gap-3">
         <Avatar className="size-9 shrink-0 border-2 border-accent/30">
           <AvatarFallback className="bg-secondary text-xs font-semibold text-primary">
@@ -35,7 +35,7 @@ function NoteCard({ note, onDelete }: { note: StaffNote; onDelete: (id: string) 
 
         <div className="min-w-0 flex-1">
           <p className="text-sm font-semibold leading-tight text-foreground">{note.author}</p>
-          <p className="font-mono text-xs tabular-nums text-muted-foreground">
+          <p className="text-xs tabular-nums text-muted-foreground">
             {formatStamp(note.timestamp)}
           </p>
         </div>
@@ -94,7 +94,7 @@ export function TabNotes({
   return (
     <div className="flex flex-col gap-4">
       {/* Composer */}
-      <div className="rounded-2xl border border-border bg-card p-4">
+      <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
         <label htmlFor="new-staff-note" className="sr-only">
           Add an observation
         </label>

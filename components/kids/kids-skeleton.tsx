@@ -2,7 +2,7 @@
 
 export function KidCardSkeleton() {
   return (
-    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5">
+    <div className="flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 shadow-card">
       <div className="flex items-center gap-3">
         <div className="size-14 shrink-0 animate-shimmer rounded-full" />
         <div className="flex flex-col gap-2">

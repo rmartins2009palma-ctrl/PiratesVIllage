@@ -2,7 +2,7 @@ import Link from "next/link"
 import { Compass, Users } from "lucide-react"
 import { AppSidebar } from "@/components/app-sidebar"
 import { TopBar } from "@/components/top-bar"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 
 export default function ChildNotFound() {
   return (
@@ -24,10 +24,10 @@ export default function ChildNotFound() {
                 registry, or the link is out of date.
               </p>
             </div>
-            <Button render={<Link href="/kids" />}>
+            <Link href="/kids" className={buttonVariants()}>
               <Users data-icon="inline-start" />
               Back to the crew registry
-            </Button>
+            </Link>
           </div>
         </main>
       </div>

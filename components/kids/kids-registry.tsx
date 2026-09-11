@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react"
 import Link from "next/link"
 import { UserPlus } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { KIDS, type Kid } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 import { FilterBar, type FilterType, type SortBy, type ViewMode } from "./filter-bar"
@@ -130,10 +130,10 @@ export function KidsRegistry() {
               All registered adventurers this season
             </p>
           </div>
-          <Button size="lg" render={<Link href="/register" />}>
+          <Link href="/register" className={buttonVariants({ size: "lg" })}>
             <UserPlus data-icon="inline-start" />
             New registration
-          </Button>
+          </Link>
         </div>
 
         <FilterBar
@@ -169,7 +169,7 @@ export function KidsRegistry() {
             ))}
           </div>
         ) : (
-          <div className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-2">
+          <div className="flex flex-col gap-1 rounded-2xl border border-border bg-card p-2 shadow-card">
             {/* Column headers */}
             <div className="hidden grid-cols-[auto_1fr_auto_auto_auto_auto] gap-4 border-b border-border px-4 pb-2 text-xs font-medium uppercase tracking-wide text-muted-foreground md:grid">
               <span className="w-10" />

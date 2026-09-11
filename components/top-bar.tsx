@@ -35,16 +35,16 @@ export function TopBar() {
     <header className="flex h-20 shrink-0 items-center justify-between gap-4 border-b border-border bg-card px-6">
       {/* Location / context */}
       <div className="flex flex-col">
-        <h1 className="font-serif text-lg font-semibold leading-tight text-foreground">
+        <p className="font-serif text-lg font-semibold leading-tight text-foreground">
           {HOTEL.name} {HOTEL.club}
-        </h1>
+        </p>
         <p className="text-sm text-muted-foreground">{HOTEL.location}</p>
       </div>
 
       <div className="flex items-center gap-4">
         {/* Date & time */}
         <div className="hidden text-right sm:block">
-          <p className="font-mono text-lg font-semibold tabular-nums leading-tight text-foreground">
+          <p className="text-lg font-semibold tabular-nums leading-tight text-foreground">
             {stamp ? stamp.time : "--:--"}
           </p>
           <p className="text-xs text-muted-foreground">{stamp ? stamp.date : "--/--/----"}</p>
@@ -55,7 +55,7 @@ export function TopBar() {
         {/* Language selector */}
         <button
           type="button"
-          className="flex min-h-11 items-center gap-2 rounded-lg border border-border bg-background px-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+          className="flex min-h-11 items-center gap-2 rounded-xl border border-border bg-background px-3 text-sm font-medium text-foreground transition-colors hover:bg-secondary focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           aria-label="Change language, current language English"
         >
           <Globe className="size-4 text-muted-foreground" />

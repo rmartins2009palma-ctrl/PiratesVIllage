@@ -54,10 +54,10 @@ export function AppSidebar() {
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <p className="truncate font-serif text-base font-semibold leading-tight text-sidebar-primary-foreground/95">
+            <p className="truncate font-serif text-base font-semibold leading-tight text-sidebar-foreground">
               {HOTEL.name}
             </p>
-            <p className="truncate text-xs uppercase tracking-[0.18em] text-sidebar-foreground/60">
+            <p className="truncate text-xs uppercase tracking-[0.18em] text-sidebar-foreground/75">
               {HOTEL.club}
             </p>
           </div>
@@ -79,7 +79,7 @@ export function AppSidebar() {
                 collapsed && "justify-center px-0",
                 isActive
                   ? "bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
-                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                  : "text-sidebar-foreground/90 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
               )}
             >
               <Icon className="size-5 shrink-0" strokeWidth={isActive ? 2.4 : 2} />
@@ -105,7 +105,7 @@ export function AppSidebar() {
           onClick={() => setCollapsed((c) => !c)}
           aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
           className={cn(
-            "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-sidebar-foreground/70 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+            "flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-sidebar-foreground/85 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
             collapsed && "justify-center px-0",
           )}
         >

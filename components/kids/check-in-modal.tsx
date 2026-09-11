@@ -15,6 +15,7 @@ import {
 } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
+import { BRAND_INK } from "@/lib/brand-constants"
 import { type Kid, fullName, kidInitials, formatDuration } from "@/lib/mock-data"
 import { cn } from "@/lib/utils"
 
@@ -215,7 +216,7 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
           </div>
           <div className="flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-sm">
             <Clock className="size-4 text-muted-foreground" />
-            <span className="font-mono tabular-nums font-medium">{currentTime}</span>
+            <span className="tabular-nums font-medium">{currentTime}</span>
             <span className="text-muted-foreground">· {longDate}</span>
           </div>
         </div>
@@ -244,7 +245,7 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
             <button
               type="button"
               onClick={onClose}
-              className="ml-auto flex size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-secondary hover:text-foreground"
+              className="ml-auto flex size-8 items-center justify-center rounded-full text-muted-foreground hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
               aria-label="Close"
             >
               <X className="size-4" />
@@ -305,7 +306,7 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
         {/* Action strip */}
         <div
           className={cn(
-            "flex items-center gap-2 px-5 py-2 text-sm font-semibold uppercase tracking-wide text-white",
+            "flex items-center gap-2 px-5 py-2 text-sm font-semibold uppercase tracking-wide text-primary-foreground",
             accentBg,
           )}
         >
@@ -333,21 +334,21 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
                 <p className="text-sm font-semibold text-warning-foreground">
                   {kid.allergies ? "Allergies" : "Medical info"}
                 </p>
-                <p className="text-sm text-warning-foreground/80">{alertText}</p>
+                <p className="text-sm text-warning-foreground">{alertText}</p>
               </div>
             </div>
           )}
 
           {/* Time display */}
           <div className="mb-5 flex flex-col items-center gap-1 rounded-xl bg-secondary/50 p-5">
-            <p className="font-mono text-5xl font-bold tabular-nums text-foreground">{currentTime}</p>
+            <p className="text-5xl font-bold tabular-nums text-foreground">{currentTime}</p>
             <p className="text-sm text-muted-foreground">{longDate}</p>
             {!isIn && kid.entryTime && (
               <div className="mt-3 flex items-center gap-4 border-t border-border pt-3 text-sm">
                 <div className="flex items-center gap-1.5">
                   <LogIn className="size-3.5 text-muted-foreground" />
                   <span className="text-muted-foreground">Checked in at</span>
-                  <span className="font-mono tabular-nums font-medium">{kid.entryTime}</span>
+                  <span className="tabular-nums font-medium">{kid.entryTime}</span>
                 </div>
                 <div className={cn("flex items-center gap-1.5 font-semibold", accentText)}>
                   <Clock className="size-3.5" />
@@ -383,7 +384,7 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
                           isSelected ? cn(accentBorder, accentBg) : "border-border",
                         )}
                       >
-                        {isSelected && <Check className="size-3 text-white" strokeWidth={4} />}
+                        {isSelected && <Check className="size-3 text-primary-foreground" strokeWidth={4} />}
                       </span>
                       <div className="min-w-0">
                         <p className="truncate text-sm font-medium text-foreground">{g.fullName}</p>
@@ -421,7 +422,7 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
                   signed ? "opacity-0" : "opacity-100",
                 )}
               >
-                <span className="font-serif text-lg tracking-wide text-muted-foreground/45">
+                <span className="font-serif text-lg tracking-wide text-muted-foreground">
                   Guardian signature
                 </span>
                 <div className="h-0.5 w-full animate-wave-drift rounded-full bg-[repeating-linear-gradient(90deg,var(--color-accent)_0_10px,transparent_10px_18px)] opacity-40" />
@@ -430,7 +431,7 @@ export function CheckInModal({ kid, action, onClose, onConfirm }: CheckInModalPr
               {padWidth > 0 && (
                 <SignatureCanvas
                   ref={padRef}
-                  penColor="#0b2545"
+                  penColor={BRAND_INK}
                   minWidth={thick ? 1.8 : 0.9}
                   maxWidth={thick ? 3.8 : 2.2}
                   dotSize={thick ? 2.4 : 1.4}

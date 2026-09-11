@@ -79,7 +79,7 @@ function GuardianFields({
             value={guardian.countryCode}
             onValueChange={(value) => onChange({ countryCode: value as string })}
           >
-            <SelectTrigger aria-label="Country dialling code" className="w-[92px] shrink-0">
+            <SelectTrigger aria-label="Country dialling code" className="w-[104px] shrink-0">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

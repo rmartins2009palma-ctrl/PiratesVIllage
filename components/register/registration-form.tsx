@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { AlertCircle, ArrowLeft, CheckCircle2, Save, Users, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { ProgressSteps } from "@/components/register/progress-steps"
 import { ChildSection } from "@/components/register/child-section"
 import { GuardianSection } from "@/components/register/guardian-section"
@@ -152,15 +152,16 @@ export function RegistrationForm() {
         <div className="mx-auto flex max-w-3xl flex-col gap-5 px-4 py-6 sm:px-6">
           {/* Page heading + back */}
           <div className="flex flex-col gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-fit text-muted-foreground"
-              render={<Link href="/" />}
+            <Link
+              href="/"
+              className={cn(
+                buttonVariants({ variant: "ghost", size: "sm" }),
+                "w-fit text-muted-foreground",
+              )}
             >
               <ArrowLeft data-icon="inline-start" />
               Back to dashboard
-            </Button>
+            </Link>
             <div>
               <h1 className="text-balance font-serif text-3xl font-bold text-foreground">
                 New crew registration
@@ -239,9 +240,9 @@ export function RegistrationForm() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline" render={<Link href="/" />}>
+            <Link href="/" className={buttonVariants({ variant: "outline" })}>
               Cancel
-            </Button>
+            </Link>
             <Button onClick={handleSubmit} disabled={showErrors && !isComplete}>
               <Save data-icon="inline-start" />
               Register &amp; check in

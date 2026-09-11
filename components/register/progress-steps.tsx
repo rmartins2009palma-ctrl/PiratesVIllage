@@ -13,7 +13,7 @@ export function ProgressSteps({
   completed: boolean[]
 }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
+    <div className="rounded-2xl border border-border bg-card p-4 shadow-card">
       <div className="flex items-center justify-between gap-2">
         <p className="font-serif text-sm font-semibold text-foreground">
           Step {current} of {STEPS.length}

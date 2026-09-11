@@ -6,7 +6,30 @@
 
 @theme inline {
   --font-sans: var(--font-inter);
-  --font-serif: var(--font-cinzel);
+  --font-serif: var(--font-fraunces);
+
+  /* Type scale tuned for a tablet held at arm's length. Redefining the tokens
+     rescales every existing text-* class at once, so the density work done on
+     the cards keeps its structure while the sizes move up one notch.
+     text-sm is the body default at 15px. */
+  --text-xs: 0.8125rem;        /* 13px - UI labels, timestamps */
+  --text-xs--line-height: 1.125rem;
+  --text-sm: 0.9375rem;        /* 15px - body */
+  --text-sm--line-height: 1.375rem;
+  --text-base: 1rem;           /* 16px */
+  --text-base--line-height: 1.5rem;
+  --text-lg: 1.125rem;         /* 18px - H3 */
+  --text-lg--line-height: 1.625rem;
+  --text-xl: 1.375rem;         /* 22px - H3 large / H2 small */
+  --text-xl--line-height: 1.75rem;
+  --text-2xl: 1.625rem;        /* 26px - H2 */
+  --text-2xl--line-height: 2rem;
+  --text-3xl: 2rem;            /* 32px - H1 */
+  --text-3xl--line-height: 2.375rem;
+  --text-4xl: 2.25rem;         /* 36px - H1 large */
+  --text-4xl--line-height: 2.625rem;
+  --text-5xl: 2.625rem;        /* 42px - display, rare */
+  --text-5xl--line-height: 2.875rem;
 
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -43,6 +66,10 @@
   --color-card: var(--card);
   --color-foreground: var(--foreground);
   --color-background: var(--background);
+  /* Warm-tinted elevation, brown-based rather than neutral black */
+  --shadow-card: 0 1px 2px rgb(61 42 31 / 0.04), 0 2px 8px rgb(61 42 31 / 0.06);
+  --shadow-card-hover: 0 2px 4px rgb(61 42 31 / 0.05), 0 8px 20px rgb(61 42 31 / 0.10);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -55,63 +82,72 @@
 :root {
   color-scheme: light;
 
-  /* Cream parchment background, deep navy ink */
-  --background: #f5f1e8;
-  --foreground: #0b2545;
+  /* Warm off-white ground, deep brown ink.
+     Not pure white: it lets --card sit above the page on a shadow rather than a
+     border, and cuts glare on a tablet used pool-side. */
+  --background: #faf8f5;
+  --foreground: #3d2a1f;
 
-  --card: #fffdf8;
-  --card-foreground: #0b2545;
+  --card: #ffffff;
+  --card-foreground: #3d2a1f;
 
-  --popover: #fffdf8;
-  --popover-foreground: #0b2545;
+  --popover: #ffffff;
+  --popover-foreground: #3d2a1f;
 
-  /* Deep navy blue */
-  --primary: #0b2545;
-  --primary-foreground: #f5f1e8;
+  /* Pirates Village brown */
+  --primary: #60402f;
+  --primary-foreground: #ffffff;
 
   /* Warm sand */
-  --secondary: #eae3d3;
-  --secondary-foreground: #0b2545;
+  --secondary: #f0e9df;
+  --secondary-foreground: #3d2a1f;
 
-  --muted: #ebe5d7;
-  --muted-foreground: #6a7482;
+  --muted: #f2ede6;
+  /* Warm grey-brown. The previous cool grey only reached 4.20:1 - below AA. */
+  --muted-foreground: #6b5b4e;
 
-  /* Warm gold accent */
-  --accent: #d4a056;
-  --accent-foreground: #0b2545;
+  /* Pirates Village beige. Surface only - as text it reads 2.17:1, so
+     --accent-foreground carries every label placed on it. */
+  --accent: #c5ad86;
+  --accent-foreground: #3d2a1f;
 
-  /* Dark red destructive */
-  --destructive: #8b2e2e;
+  /* Clear red, kept distinct from the brown it now sits beside */
+  --destructive: #a81b1b;
 
-  /* Amber warning (important info captured) */
-  --warning: #b9772a;
-  --warning-foreground: #5c3d12;
+  /* Deep amber. The previous #b9772a sat at hue 32deg - between the brand brown
+     (21deg) and beige (37deg) - so warnings read as decoration, and it only
+     reached 3.45:1. Separation now comes from depth, not hue. */
+  --warning: #92400e;
+  --warning-foreground: #5c3410;
 
-  /* Sea-green success */
-  --success: #2f7d5b;
-  --success-foreground: #f5f1e8;
+  /* Sea-green success. Deepened from #2f7d5b: as text on its own /12 tint that
+     only reached 4.26:1, so every "In club" pill was below AA. */
+  --success: #276749;
+  --success-foreground: #ffffff;
 
-  --border: #ddd4c1;
-  --input: #ddd4c1;
-  --ring: #d4a056;
+  --border: #e5dcd0;
+  --input: #e5dcd0;
+  /* Brown, not beige: WCAG 2.2 wants 3:1 for focus indicators and beige gives
+     2.17:1 on white. The previous gold ring managed only 2.08:1. */
+  --ring: #60402f;
 
-  --chart-1: #d4a056;
-  --chart-2: #0b2545;
-  --chart-3: #2f7d8f;
-  --chart-4: #8b2e2e;
-  --chart-5: #9c874f;
+  --chart-1: #c5ad86;
+  --chart-2: #60402f;
+  --chart-3: #4a7c74;
+  --chart-4: #a8763f;
+  --chart-5: #8a6a4a;
 
-  --radius: 0.625rem;
+  --radius: 0.875rem;
 
-  /* Navy sidebar with gold active state */
-  --sidebar: #0b2545;
-  --sidebar-foreground: #cdd6e2;
-  --sidebar-primary: #d4a056;
-  --sidebar-primary-foreground: #0b2545;
-  --sidebar-accent: #12345c;
-  --sidebar-accent-foreground: #f5f1e8;
-  --sidebar-border: #1b3b60;
-  --sidebar-ring: #d4a056;
+  /* Brown sidebar with a beige active state */
+  --sidebar: #60402f;
+  --sidebar-foreground: #f7f2ea;
+  --sidebar-primary: #c5ad86;
+  --sidebar-primary-foreground: #3d2a1f;
+  --sidebar-accent: #75503c;
+  --sidebar-accent-foreground: #faf8f5;
+  --sidebar-border: #7a5741;
+  --sidebar-ring: #c5ad86;
 }
 
 @layer base {
@@ -120,15 +156,21 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-size: var(--text-sm);
+    line-height: var(--text-sm--line-height);
   }
-}
 
-@keyframes compass-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+  /* Fraunces is an old-style variable face: SOFT warms the terminals, and a
+     touch of negative tracking stops display sizes from feeling airy.
+     Cinzel needed positive tracking because it is all-caps inscriptional;
+     Fraunces is mixed-case and needs the opposite. */
+  .font-serif {
+    font-variation-settings: 'SOFT' 40;
+    /* Let the browser drive opsz from the rendered size: a 18px section title
+       and a 36px page heading then use different optical designs. Naming opsz
+       in font-variation-settings would have frozen it and defeated that. */
+    font-optical-sizing: auto;
+    letter-spacing: -0.005em;
   }
 }
 
@@ -187,9 +229,6 @@
   }
 }
 
-.animate-compass-spin {
-  animation: compass-spin 9s linear infinite;
-}
 .animate-sail-across {
   animation: sail-across 3.4s ease-in-out forwards;
 }
@@ -214,23 +253,12 @@
   animation: shimmer 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse-attention {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(217, 160, 86, 0); }
-  50% { box-shadow: 0 0 0 4px rgba(217, 160, 86, 0.25); }
-}
-
-.animate-pulse-attention {
-  animation: pulse-attention 2s ease-in-out infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .animate-compass-spin,
   .animate-sail-across,
   .animate-pop-in,
   .animate-confetti-fall,
   .animate-wave-drift,
-  .animate-shimmer,
-  .animate-pulse-attention {
+  .animate-shimmer {
     animation: none;
   }
 }

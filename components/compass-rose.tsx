@@ -34,7 +34,7 @@ export function CompassRose({ className }: { className?: string }) {
       </g>
 
       {/* Four-point star: cardinal points filled, intercardinals outlined */}
-      <g className="animate-compass-spin origin-center">
+      <g>
         <path
           d="M100 18 L112 88 L100 100 L88 88 Z M100 182 L112 112 L100 100 L88 112 Z"
           fill="currentColor"

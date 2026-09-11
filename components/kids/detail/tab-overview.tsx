@@ -15,7 +15,7 @@ import {
   Users,
 } from "lucide-react"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   type Kid,
@@ -276,15 +276,13 @@ export function TabOverview({ kid }: { kid: Kid }) {
                         {sibling.age} years · Room {sibling.room}
                       </p>
                     </div>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="shrink-0"
-                      render={<Link href={`/kids/${sibling.id}`} />}
+                    <Link
+                      href={`/kids/${sibling.id}`}
+                      className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "shrink-0")}
                     >
                       View
                       <ArrowRight data-icon="inline-end" className="size-3 opacity-60" />
-                    </Button>
+                    </Link>
                   </div>
                 ))}
               </>
@@ -293,10 +291,13 @@ export function TabOverview({ kid }: { kid: Kid }) {
                 <p className="text-sm text-muted-foreground">
                   No siblings registered. Travelling companions in the same room will appear here.
                 </p>
-                <Button variant="outline" size="sm" render={<Link href={addSiblingHref(kid)} />}>
+                <Link
+                  href={addSiblingHref(kid)}
+                  className={buttonVariants({ variant: "outline", size: "sm" })}
+                >
                   <UserPlus data-icon="inline-start" />
                   Add sibling
-                </Button>
+                </Link>
               </div>
             )}
           </CardContent>

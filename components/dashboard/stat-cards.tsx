@@ -29,17 +29,16 @@ export function StatCards() {
       {STATS.map((stat) => {
         const Icon = stat.icon
         return (
-          <Card key={stat.label} className="border-border/70">
-            <CardContent className="flex items-center gap-4">
-              <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-secondary text-primary">
-                <Icon className="size-5" />
+          <Card key={stat.label} size="sm" className="border-border/70">
+            <CardContent className="flex items-center gap-3">
+              <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-secondary/70 text-muted-foreground">
+                <Icon className="size-4" />
               </span>
               <div className="min-w-0">
-                <p className="text-sm text-muted-foreground">{stat.label}</p>
-                <p className="font-serif text-2xl font-bold leading-tight text-foreground">
+                <p className="text-xs text-muted-foreground">{stat.label}</p>
+                <p className="text-lg font-semibold leading-tight tabular-nums text-foreground">
                   {stat.value}
                 </p>
-                <p className="text-xs text-muted-foreground">{stat.hint}</p>
               </div>
             </CardContent>
           </Card>

@@ -11,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { HOTEL_CONFIG } from "@/lib/hotel-config"
 import { cn } from "@/lib/utils"
 
 export type FilterType = "all" | "in" | "out" | "today" | "allergies"
@@ -29,12 +30,21 @@ interface FilterBarProps {
   counts: Record<FilterType, number>
 }
 
-const FILTER_CHIPS: { type: FilterType; label: string; icon?: typeof Clock; dotClass?: string }[] = [
+interface FilterChip {
+  type: FilterType
+  label: string
+  icon?: typeof Clock
+  dotClass?: string
+  /** Edge-case filters, kept in the code but hidden unless the hotel opts in. */
+  advanced?: boolean
+}
+
+const FILTER_CHIPS: FilterChip[] = [
   { type: "all", label: "All" },
   { type: "in", label: "In club", dotClass: "bg-success" },
   { type: "out", label: "Out", dotClass: "bg-muted-foreground/50" },
-  { type: "today", label: "Registered today", icon: Clock },
-  { type: "allergies", label: "With allergies", icon: TriangleAlert },
+  { type: "today", label: "Registered today", icon: Clock, advanced: true },
+  { type: "allergies", label: "With allergies", icon: TriangleAlert, advanced: true },
 ]
 
 export function FilterBar({
@@ -48,6 +58,9 @@ export function FilterBar({
   onViewModeChange,
   counts,
 }: FilterBarProps) {
+  const { showAdvancedFilters } = HOTEL_CONFIG.displayFields.kidsRegistry
+  const visibleChips = FILTER_CHIPS.filter((chip) => showAdvancedFilters || !chip.advanced)
+
   return (
     <div className="sticky top-0 z-20 -mx-4 space-y-3 bg-background/85 px-4 py-3 backdrop-blur-md sm:-mx-6 sm:px-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -109,7 +122,7 @@ export function FilterBar({
             value={sortBy}
             onValueChange={(v) => onSortChange(v as SortBy)}
           >
-            <SelectTrigger className="h-10 w-[180px] text-sm" aria-label="Sort by">
+            <SelectTrigger className="h-10 w-[210px] text-sm" aria-label="Sort by">
               <span className="text-muted-foreground">Sort:</span>
               <SelectValue />
             </SelectTrigger>
@@ -126,7 +139,7 @@ export function FilterBar({
       </div>
 
       <div className="flex flex-wrap items-center gap-2">
-        {FILTER_CHIPS.map((chip) => {
+        {visibleChips.map((chip) => {
           const isActive = activeFilters.has(chip.type)
           const count = counts[chip.type] ?? 0
           const Icon = chip.icon
@@ -148,7 +161,7 @@ export function FilterBar({
               )}
               {Icon && <Icon className="size-3.5" />}
               {chip.label}
-              <span className={cn("tabular-nums", isActive ? "text-primary-foreground/70" : "text-muted-foreground/60")}>
+              <span className={cn("tabular-nums", isActive ? "text-primary-foreground/90" : "text-muted-foreground")}>
                 {count}
               </span>
             </button>
