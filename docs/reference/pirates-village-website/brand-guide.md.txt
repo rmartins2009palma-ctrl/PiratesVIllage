@@ -1,0 +1,72 @@
+I have detailed brand tokens extracted from the official Pirates Village website by another AI. I'm saving that document at:
+
+docs/reference/pirates-village-website/brand-guide.md
+
+Please read it thoroughly before responding.
+
+## CRITICAL FRAMING BEFORE YOU APPLY ANYTHING
+
+That document is excellent for tokens (colors, fonts, radii, spacing, motion) but it was written assuming a CONSUMER-facing hotel guest app. Our app is different: it is an OPERATIONAL tool used by animation staff and management, not by hotel guests.
+
+Concrete implications:
+
+DO adopt from the document:
+- The exact color palette (#60402f primary brown, #c5ad86 warm beige accent, white background)
+- Typography families (serif for headers, Montserrat for body/UI)
+- The philosophy of white space, rounded shapes, subtle shadows
+- The radius, spacing, and motion scales
+- The warmth and elegance of the visual language
+
+DO NOT adopt from the document:
+- "Hero sections with immersive resort photography" — we have no hero sections. This is not a guest experience app.
+- Component types like HotelCard, EventCard, ActivityCard, Rating, Calendar — these do not apply to our operational tool
+- Bottom navigation — we already have a sidebar layout optimized for tablet landscape (our target device)
+- The framing of "when user opens the app, immediate impression is Pirates Village" — no. Our user (Marina the animator) needs to think "this works, I can do my job fast" first. Brand recognition is secondary and subtle.
+- Pirate illustrations or nautical decorations in day-to-day operational screens — we keep those extremely restrained, perhaps only on login. Operational screens are clean.
+
+Our app must feel:
+- Warm and welcoming (aligned with hotel brand)
+- Professional and efficient (aligned with operational need)
+- Clean and legible (staff use it under pressure with parents waiting)
+
+Not:
+- Playful, adventurous, immersive (that would slow down operational use)
+- Consumer-facing marketing aesthetic
+
+## THE ADAPTATION PLAN I WANT YOU TO PROPOSE
+
+Read the brand guide document, then propose the following without changing anything yet:
+
+1. Updated CSS token file (app/globals.css) mapping the current semantic tokens to the new brand values:
+   - --primary changes from navy #0B2545 to brown #60402f
+   - --accent changes from gold #D4A056 to warm beige #c5ad86
+   - --background stays as cream or shifts to white per the brand guide — recommend which
+   - --card, --secondary, --muted, --border: propose new values that harmonize with brown/beige
+   - Semantic states (--success, --warning, --destructive): recommend whether to keep current values or adjust for harmony
+   - Contrast: verify all combinations still pass WCAG AA
+
+2. Typography changes:
+   - Replace Cinzel (current serif) with a recommended free alternative closer to "map-roman-variable" style. Suggest Cormorant Garamond, Fraunces, or another option that fits the elegant-rustic feel of Pirates Village
+   - Keep body font as Inter, or migrate to Montserrat as the brand guide specifies. Recommend which and why
+   - Adjust mobile/tablet type scale: display 32-42, H1 28-36, H2 22-28, H3 18-22, body 15-17 (slightly larger than the doc suggests, since our users may operate the tablet at arm's length)
+
+3. Shape adjustments:
+   - Current --radius is 0.625rem (~10px). The brand uses 20px/25px/50px. Propose migration: cards move to ~20-25px, buttons to pill shapes (~30-50px), inputs to ~20px
+   - This is a big visual change; propose whether to apply gradually or all at once
+
+4. Component updates:
+   - Which existing components need visual adjustment to reflect the new tokens (this should mostly be automatic if we use semantic tokens correctly)
+   - Any hardcoded hex values in components that need to be replaced with tokens
+   - The pirate decorative elements currently in the app (compass rose, anchor icon in sidebar): keep, adjust, or remove per the "restrained on operational screens" principle
+
+5. What NOT to change:
+   - Layout structure (sidebar + main area, tab structures, card hierarchies)
+   - Functional patterns (modals, forms, filters)
+   - The information density work we just did (that stays)
+
+Report your findings and proposal. Do not change any file yet. Include:
+- Sample "before → after" comparisons for 3-4 key components (button, card, badge, header)
+- Contrast ratio calculations for the main color combinations
+- A recommendation on whether to apply changes to ALL screens at once or start with one screen and iterate
+
+I want to see the plan before you touch code. This is a significant visual shift and I want to be sure we align on direction before executing.
