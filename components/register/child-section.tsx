@@ -35,18 +35,8 @@ function Req() {
 export function ChildSection({ draft, onChange, errors }: Props) {
   return (
     <Card className="scroll-mt-6">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <Compass className="size-5" />
-          </span>
-          <div>
-            <CardTitle className="font-serif text-xl">About the little adventurer</CardTitle>
-            <CardDescription>Tell us who is joining the crew today.</CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-5">
+      {/* No section title: the labels are the hierarchy now. */}
+      <CardContent className="flex flex-col gap-5 pt-1">
         <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <Field data-invalid={!!errors.firstName || undefined}>
             <FieldLabel htmlFor="firstName">
@@ -56,7 +46,6 @@ export function ChildSection({ draft, onChange, errors }: Props) {
               id="firstName"
               autoFocus
               autoComplete="off"
-              placeholder="e.g., Emma"
               value={draft.firstName}
               aria-invalid={!!errors.firstName || undefined}
               aria-describedby={errors.firstName ? "firstName-error" : undefined}
@@ -72,7 +61,6 @@ export function ChildSection({ draft, onChange, errors }: Props) {
             <Input
               id="lastName"
               autoComplete="off"
-              placeholder="e.g., Thompson"
               value={draft.lastName}
               aria-invalid={!!errors.lastName || undefined}
               aria-describedby={errors.lastName ? "lastName-error" : undefined}
@@ -107,9 +95,6 @@ export function ChildSection({ draft, onChange, errors }: Props) {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {draft.age && !errors.age ? (
-              <FieldDescription>{draft.age} years young</FieldDescription>
-            ) : null}
             {errors.age && <FieldError id="age-error">{errors.age}</FieldError>}
           </Field>
 
@@ -121,7 +106,6 @@ export function ChildSection({ draft, onChange, errors }: Props) {
               id="room"
               inputMode="numeric"
               pattern="[0-9]*"
-              placeholder="e.g., 214"
               value={draft.room}
               aria-invalid={!!errors.room || undefined}
               aria-describedby={errors.room ? "room-error" : undefined}
@@ -138,7 +122,6 @@ export function ChildSection({ draft, onChange, errors }: Props) {
           </FieldLabel>
           <Textarea
             id="allergies"
-            placeholder="e.g., nuts, dairy, none"
             value={draft.allergies}
             onChange={(e) => onChange({ allergies: e.target.value })}
             className={cn(
@@ -146,13 +129,11 @@ export function ChildSection({ draft, onChange, errors }: Props) {
                 "border-warning/60 bg-warning/10 focus-visible:border-warning focus-visible:ring-warning/20",
             )}
           />
-          {draft.allergies.trim() ? (
+          {draft.allergies.trim() && (
             <FieldDescription className="flex items-center gap-1.5 text-warning-foreground">
               <TriangleAlert className="size-3.5 text-warning" />
               Important info captured — staff will be alerted.
             </FieldDescription>
-          ) : (
-            <FieldDescription>Optional, but please note anything the crew should watch for.</FieldDescription>
           )}
         </Field>
 
@@ -163,7 +144,6 @@ export function ChildSection({ draft, onChange, errors }: Props) {
           </FieldLabel>
           <Textarea
             id="medical"
-            placeholder="e.g., mild asthma (inhaler at reception), none"
             value={draft.medical}
             onChange={(e) => onChange({ medical: e.target.value })}
             className={cn(
@@ -171,13 +151,11 @@ export function ChildSection({ draft, onChange, errors }: Props) {
                 "border-warning/60 bg-warning/10 focus-visible:border-warning focus-visible:ring-warning/20",
             )}
           />
-          {draft.medical.trim() ? (
+          {draft.medical.trim() && (
             <FieldDescription className="flex items-center gap-1.5 text-warning-foreground">
               <HeartPulse className="size-3.5 text-warning" />
               Important info captured — staff will be alerted.
             </FieldDescription>
-          ) : (
-            <FieldDescription>Optional. Include anything affecting participation or care.</FieldDescription>
           )}
         </Field>
 
@@ -188,7 +166,6 @@ export function ChildSection({ draft, onChange, errors }: Props) {
           </FieldLabel>
           <Textarea
             id="notes"
-            placeholder="e.g., shy at first, loves drawing"
             value={draft.notes}
             onChange={(e) => onChange({ notes: e.target.value })}
             className="min-h-12"

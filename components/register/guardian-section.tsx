@@ -64,7 +64,6 @@ function GuardianFields({
         <Input
           id={`${guardian.id}-name`}
           autoComplete="off"
-          placeholder="e.g., Sarah Thompson"
           value={guardian.fullName}
           aria-invalid={!!errors[key("fullName")] || undefined}
           onChange={(e) => onChange({ fullName: e.target.value })}
@@ -98,7 +97,6 @@ function GuardianFields({
             id={`${guardian.id}-phone`}
             inputMode="tel"
             autoComplete="off"
-            placeholder="7700 900142"
             value={guardian.phone}
             aria-invalid={!!errors[key("phone")] || undefined}
             onChange={(e) => onChange({ phone: formatPhone(e.target.value) })}
@@ -140,7 +138,6 @@ function GuardianFields({
             id={`${guardian.id}-email`}
             type="email"
             autoComplete="off"
-            placeholder="name@example.com"
             value={guardian.email}
             onChange={(e) => onChange({ email: e.target.value })}
           />
@@ -162,18 +159,7 @@ export function GuardianSection({
 
   return (
     <Card className="scroll-mt-6">
-      <CardHeader>
-        <div className="flex items-center gap-3">
-          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-            <LifeBuoy className="size-5" />
-          </span>
-          <div>
-            <CardTitle className="font-serif text-xl">Guardian on watch</CardTitle>
-            <CardDescription>Who is responsible for this child during their stay.</CardDescription>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-6">
+      <CardContent className="flex flex-col gap-6 pt-1">
         <GuardianFields
           guardian={primary}
           index={0}
@@ -212,10 +198,6 @@ export function GuardianSection({
             <Plus data-icon="inline-start" />
             Add another authorized adult
           </Button>
-          <p className="flex items-start gap-2 text-sm text-muted-foreground">
-            <ShieldCheck className="mt-0.5 size-4 shrink-0 text-accent" />
-            Only registered guardians can pick up the child from the club. You can add more people at any time.
-          </p>
         </div>
       </CardContent>
     </Card>

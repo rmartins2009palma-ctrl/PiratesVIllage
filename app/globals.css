@@ -262,3 +262,23 @@
     animation: none;
   }
 }
+
+/* Registration form only: paper-sized labels and fields.
+   Deliberately unlayered — Tailwind's utilities layer would otherwise win over
+   @layer components and Input's own `md:text-sm` would shrink the text back.
+   Scoped to .form-lg so the registry search and the statistics date pickers
+   keep their compact sizing. */
+.form-lg [data-slot="field-label"] {
+  font-size: 1.0625rem;
+  font-weight: 500;
+}
+.form-lg [data-slot="input"],
+.form-lg [data-slot="select-trigger"] {
+  height: 3.25rem;
+  padding-inline: 0.875rem;
+  font-size: 1.0625rem;
+}
+.form-lg [data-slot="textarea"] {
+  padding: 0.75rem 0.875rem;
+  font-size: 1.0625rem;
+}

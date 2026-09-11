@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 import { AlertCircle, ArrowLeft, CheckCircle2, Save, Users, X } from "lucide-react"
@@ -58,16 +58,10 @@ export function RegistrationForm() {
   const [bannerDismissed, setBannerDismissed] = useState(false)
   const [signed, setSigned] = useState(false)
   const [showErrors, setShowErrors] = useState(false)
-  const [currentStep, setCurrentStep] = useState(1)
   const [checkInTime, setCheckInTime] = useState("")
   const [registeredName, setRegisteredName] = useState("")
 
   const scrollRef = useRef<HTMLElement>(null)
-  const sectionRefs = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-  ]
 
   const allErrors = useMemo(() => computeErrors(draft, signed), [draft, signed])
   const missingCount = Object.keys(allErrors).length
@@ -87,29 +81,6 @@ export function RegistrationForm() {
     ],
     [draft, signed],
   )
-
-  // Track the section currently in view to drive the step indicator.
-  useEffect(() => {
-    const root = scrollRef.current
-    const nodes = sectionRefs.map((r) => r.current).filter(Boolean) as Element[]
-    if (!root || nodes.length === 0) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0]
-        if (visible) {
-          const idx = nodes.indexOf(visible.target)
-          if (idx >= 0) setCurrentStep(idx + 1)
-        }
-      },
-      { root, rootMargin: "-40% 0px -40% 0px", threshold: [0, 0.25, 0.5, 1] },
-    )
-    nodes.forEach((n) => observer.observe(n))
-    return () => observer.disconnect()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   const patchDraft = useCallback((patch: Partial<RegistrationDraft>) => {
     setDraft((d) => ({ ...d, ...patch }))
@@ -157,7 +128,7 @@ export function RegistrationForm() {
   return (
     <>
       <main ref={scrollRef} className="min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto flex max-w-3xl flex-col gap-5 px-4 py-6 sm:px-6">
+        <div className="form-lg mx-auto flex max-w-3xl flex-col gap-5 px-4 py-6 sm:px-6">
           {/* Page heading + back */}
           <div className="flex flex-col gap-4">
             <Link
@@ -205,13 +176,13 @@ export function RegistrationForm() {
           )}
 
           <div className="sticky top-0 z-10 -mx-4 bg-background/80 px-4 py-2 backdrop-blur sm:-mx-6 sm:px-6">
-            <ProgressSteps current={currentStep} completed={completed} />
+            <ProgressSteps completed={completed} />
           </div>
 
-          <div ref={sectionRefs[0]}>
+          <div>
             <ChildSection draft={draft} onChange={patchDraft} errors={visibleErrors} />
           </div>
-          <div ref={sectionRefs[1]}>
+          <div>
             <GuardianSection
               guardians={draft.guardians}
               onGuardianChange={patchGuardian}
@@ -220,7 +191,7 @@ export function RegistrationForm() {
               errors={visibleErrors}
             />
           </div>
-          <div ref={sectionRefs[2]}>
+          <div>
             <ConsentSection
               consent={draft.consent}
               onConsentChange={(v) => patchDraft({ consent: v })}
