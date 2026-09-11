@@ -654,3 +654,177 @@ export function getVisitStats(kid: Kid): VisitStats {
     favoriteWindow: count === 0 ? "Not enough visits yet" : `${label} (mostly ${range})`,
   }
 }
+
+// ---------------------------------------------------------------------------
+// Aggregated statistics for the Ship's Log.
+//
+// Shaped the way a backend would return it: one snapshot per requested range,
+// already aggregated. Swapping the mock for a Supabase query means replacing
+// getStats() alone — no component touches the raw KIDS array.
+// ---------------------------------------------------------------------------
+
+export type StatsRangeId = "today" | "week" | "month" | "custom"
+
+export interface DailyVisits {
+  /** ISO date */
+  date: string
+  visits: number
+}
+
+export interface HourlyVisits {
+  /** 24-hour clock, e.g. 16 for 16:00 */
+  hour: number
+  visits: number
+}
+
+export interface TopVisitor {
+  kidId: string
+  visits: number
+  totalMinutes: number
+}
+
+export interface StatsSummary {
+  totalVisits: number
+  uniqueChildren: number
+  averageStayMinutes: number
+}
+
+/** Percentage change against the preceding period of the same length. */
+export interface StatsTrend {
+  totalVisits: number
+  uniqueChildren: number
+  averageStayMinutes: number
+}
+
+export interface StatsSnapshot {
+  /** ISO dates, inclusive */
+  from: string
+  to: string
+  summary: StatsSummary
+  trend: StatsTrend
+  daily: DailyVisits[]
+  hourly: HourlyVisits[]
+  topVisitors: TopVisitor[]
+}
+
+/** Fri 04/09 - Thu 10/09. Attendance leans to the weekend, as it does in season. */
+const WEEK_SNAPSHOT: StatsSnapshot = {
+  from: "2026-09-04",
+  to: "2026-09-10",
+  summary: { totalVisits: 342, uniqueChildren: 87, averageStayMinutes: 144 },
+  trend: { totalVisits: 12, uniqueChildren: 8, averageStayMinutes: -4 },
+  daily: [
+    { date: "2026-09-04", visits: 41 },
+    { date: "2026-09-05", visits: 58 },
+    { date: "2026-09-06", visits: 61 },
+    { date: "2026-09-07", visits: 44 },
+    { date: "2026-09-08", visits: 39 },
+    { date: "2026-09-09", visits: 52 },
+    { date: "2026-09-10", visits: 47 },
+  ],
+  hourly: [
+    { hour: 10, visits: 22 },
+    { hour: 11, visits: 28 },
+    { hour: 12, visits: 36 },
+    { hour: 13, visits: 27 },
+    { hour: 14, visits: 34 },
+    { hour: 15, visits: 40 },
+    { hour: 16, visits: 47 },
+    { hour: 17, visits: 44 },
+    { hour: 18, visits: 41 },
+    { hour: 19, visits: 23 },
+  ],
+  topVisitors: [
+    { kidId: "k11", visits: 12, totalMinutes: 1730 },
+    { kidId: "k16", visits: 11, totalMinutes: 1584 },
+    { kidId: "k17", visits: 9, totalMinutes: 1395 },
+    { kidId: "k6", visits: 8, totalMinutes: 1120 },
+    { kidId: "k1", visits: 7, totalMinutes: 1008 },
+  ],
+}
+
+const TODAY_SNAPSHOT: StatsSnapshot = {
+  from: "2026-09-10",
+  to: "2026-09-10",
+  summary: { totalVisits: 47, uniqueChildren: 31, averageStayMinutes: 138 },
+  trend: { totalVisits: -10, uniqueChildren: -3, averageStayMinutes: 6 },
+  daily: [{ date: "2026-09-10", visits: 47 }],
+  hourly: [
+    { hour: 10, visits: 4 },
+    { hour: 11, visits: 5 },
+    { hour: 12, visits: 6 },
+    { hour: 13, visits: 3 },
+    { hour: 14, visits: 5 },
+    { hour: 15, visits: 6 },
+    { hour: 16, visits: 8 },
+    { hour: 17, visits: 5 },
+    { hour: 18, visits: 3 },
+    { hour: 19, visits: 2 },
+  ],
+  topVisitors: [
+    { kidId: "k11", visits: 2, totalMinutes: 290 },
+    { kidId: "k1", visits: 2, totalMinutes: 245 },
+    { kidId: "k3", visits: 1, totalMinutes: 150 },
+    { kidId: "k13", visits: 1, totalMinutes: 165 },
+    { kidId: "k9", visits: 1, totalMinutes: 95 },
+  ],
+}
+
+const MONTH_SNAPSHOT: StatsSnapshot = {
+  from: "2026-08-12",
+  to: "2026-09-10",
+  summary: { totalVisits: 1268, uniqueChildren: 214, averageStayMinutes: 151 },
+  trend: { totalVisits: 19, uniqueChildren: 14, averageStayMinutes: 2 },
+  daily: Array.from({ length: 30 }, (_, i) => {
+    const day = new Date(Date.UTC(2026, 7, 12 + i))
+    const weekend = day.getUTCDay() === 0 || day.getUTCDay() === 6
+    // Deterministic wobble so the server and client render identical charts.
+    const wobble = ((i * 37) % 11) - 5
+    return {
+      date: day.toISOString().slice(0, 10),
+      visits: (weekend ? 56 : 38) + wobble,
+    }
+  }),
+  hourly: [
+    { hour: 10, visits: 82 },
+    { hour: 11, visits: 104 },
+    { hour: 12, visits: 133 },
+    { hour: 13, visits: 99 },
+    { hour: 14, visits: 126 },
+    { hour: 15, visits: 148 },
+    { hour: 16, visits: 174 },
+    { hour: 17, visits: 163 },
+    { hour: 18, visits: 152 },
+    { hour: 19, visits: 87 },
+  ],
+  topVisitors: [
+    { kidId: "k11", visits: 38, totalMinutes: 5510 },
+    { kidId: "k17", visits: 31, totalMinutes: 4805 },
+    { kidId: "k16", visits: 29, totalMinutes: 4176 },
+    { kidId: "k6", visits: 26, totalMinutes: 3640 },
+    { kidId: "k10", visits: 22, totalMinutes: 3102 },
+  ],
+}
+
+const SNAPSHOTS: Record<StatsRangeId, StatsSnapshot> = {
+  today: TODAY_SNAPSHOT,
+  week: WEEK_SNAPSHOT,
+  month: MONTH_SNAPSHOT,
+  // Custom currently mirrors the week; the picker is wired, the query is not.
+  custom: WEEK_SNAPSHOT,
+}
+
+/** The single seam a Supabase query replaces. */
+export function getStats(range: StatsRangeId): StatsSnapshot {
+  return SNAPSHOTS[range]
+}
+
+export function findKid(id: string): Kid | undefined {
+  return KIDS.find((k) => k.id === id)
+}
+
+/** The hour with the most visits, used to highlight one bar and caption it. */
+export function peakHour(hourly: HourlyVisits[]): HourlyVisits | undefined {
+  if (hourly.length === 0) return undefined
+  return hourly.reduce((best, h) => (h.visits > best.visits ? h : best))
+}
